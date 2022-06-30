@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Posts = sequelize.define("Posts", {
-    postId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
@@ -20,5 +20,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
+  Posts.associate = (models) => {
+    Posts.hasMany(models.Comments, {
+      onDelete: "cascade",
+    });
+    Posts.hasMany(models.Likes, {
+      onDelete: "cascade",
+    });
+  };
   return Posts;
 };

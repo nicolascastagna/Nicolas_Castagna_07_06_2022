@@ -1,31 +1,29 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+
 const app = express();
-const helmet = require("helmet");
-const db = require("./models");
-
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-// Routes
-
-const postRouter = require("./routes/posts");
-app.use("/api/posts", postRouter);
-const usersRouter = require("./routes/users");
-app.use("/api/auth", usersRouter);
-const commentsRouter = require("./routes/comments");
-app.use("/api/comments", commentsRouter);
-const likeRouter = require("./routes/likes");
-app.use("/api/like", likeRouter);
-
-db.sequelize.sync().then(() => {
-  app.listen(3001, () => {
-    console.log("Server running on port 3001");
-  });
-});
-
 // extrait le corps JSON
 app.use(express.json());
 
+const helmet = require("helmet");
+const db = require("./models");
+
+// imports routes
+const postRoutes = require("./routes/posts");
+const usersRoutes = require("./routes/user");
+const commentsRoutes = require("./routes/comments");
+const likesRoutes = require("./routes/likes");
+
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+db.sequelize.sync().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on port : ${process.env.PORT}`);
+  });
+});
+
 app.use((req, res, next) => {
-  // accéder à l'API depuis n'importe quelle origine et envoies requêtes avec les méthodes get...
+  // accéder à l'API depuis n'importe quelle origine
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Methods",
@@ -37,3 +35,13 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(bodyParser.json());
+
+// Routes
+app.use("/posts", postRoutes);
+app.use("/auth", usersRoutes);
+app.use("/comments", commentsRoutes);
+app.use("/like", likesRoutes);
+
+module.exports = app;

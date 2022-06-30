@@ -1,14 +1,18 @@
-const Posts = require("./Posts");
-
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define("Users", {
-    userId: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     email: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
     password: {
@@ -21,12 +25,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     firstName: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     lastName: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
   });
   Users.associate = (models) => {
+    Users.hasMany(models.Likes, {
+      onDelete: "cascade",
+    });
+
     Users.hasMany(models.Posts, {
       onDelete: "cascade",
     });
