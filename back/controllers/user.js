@@ -17,7 +17,6 @@ exports.signup = (req, res, next) => {
         password: hash,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        userPicture: "",
       });
 
       if (
