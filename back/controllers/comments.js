@@ -14,14 +14,52 @@ exports.getAllComments = (req, res, next) => {
   res.json(comments);
 };
 
-exports.deleteComment = (req, res) => {
-  const commentId = req.params.commentId;
-
-  Comments.destroy({
-    where: {
-      id: commentId,
-    },
+exports.modifyComment = (req, res, next) => {
+  const userComment = req.file
+    ? {
+        ...JSON.parse(req.body.comment),
+        commentsFile: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+      }
+    : { ...req.body };
+  Comments.findOne({ where: { id: req.params.id } }).then((comment) => {
+    if (!req.file) {
+      Comments.updateOne(
+        { where: { id: req.params.id } },
+        { ...userComment, id: req.params.id }
+      )
+        .then(() => res.status(200).json({ message: "Post modifié !" }))
+        .catch((error) => res.status(400).json({ error }));
+    } else {
+      const filename = comment.commentsFile.split("/images/")[1];
+      fs.unlink(`images/${filename}`, () => {
+        Comments.updateOne(
+          { where: { id: req.params.id } },
+          { ...userComment, id: req.params.id }
+        )
+          .then(() => res.status(200).json({ message: "Post modifié !" }))
+          .catch((error) => res.status(400).json({ error }));
+      });
+    }
   });
+};
 
-  res.json("Commentaire supprimé avec succès !");
+exports.deleteComment = (req, res, next) => {
+  Comments.findOne({ where: { id: req.params.id } }).then((comment) => {
+    if (!comment) {
+      return res.status(404).json({
+        error: new error("Commentaire non trouvé !"),
+      });
+    }
+    // Compare userId avec le propriétaire du commentaire pour supprimer
+    if (comment.id !== req.auth.commentId) {
+      return res.status(401).json({
+        error: new error("Requête non autorisée !"),
+      });
+    }
+    Comments.destroy({ where: { id: req.params.id } })
+      .then(() => res.status(200).json({ message: "Commentaire supprimé !" }))
+      .catch((error) => res.status(400).json({ error }));
+  });
 };

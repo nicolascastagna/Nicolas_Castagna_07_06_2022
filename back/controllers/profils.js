@@ -21,25 +21,25 @@ exports.modifyProfil = (req, res, next) => {
   const userProfil = req.file
     ? {
         ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        userPicture: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,
       }
     : { ...req.body };
-  Users.findOne({ _id: req.params.id }).then((user) => {
+  Users.findOne({ where: { id: req.params.id } }).then((user) => {
     if (!req.file) {
       Users.updateOne(
-        { _id: req.params.id },
-        { ...userProfil, _id: req.params.id }
+        { where: { id: req.params.id } },
+        { ...userProfil, id: req.params.id }
       )
         .then(() => res.status(200).json({ message: "Profil modifié !" }))
         .catch((error) => res.status(400).json({ error }));
     } else {
-      const filename = user.imageUrl.split("/images/")[1];
+      const filename = user.userPicture.split("/images/")[1];
       fs.unlink(`images/${filename}`, () => {
         Users.updateOne(
-          { _id: req.params.id },
-          { ...userProfil, _id: req.params.id }
+          { where: { id: req.params.id } },
+          { ...userProfil, id: req.params.id }
         )
           .then(() => res.status(200).json({ message: "Profil modifié !" }))
           .catch((error) => res.status(400).json({ error }));
@@ -57,7 +57,7 @@ exports.deleteProfil = (req, res, next) => {
         error: new error("Utilisateur non trouvé !"),
       });
     }
-    // Compare userId avec le propriétaire de la sauce pour supprimer
+    // Compare userId avec le propriétaire du profil pour supprimer
     if (user.id !== req.auth.userId) {
       return res.status(401).json({
         error: new error("Requête non autorisée !"),

@@ -1,14 +1,12 @@
-const { Posts, Likes } = require("../models/Posts");
+const { Posts, Likes } = require("../models");
 const fs = require("fs");
 
 exports.createPost = (req, res, next) => {
-  const postObject = JSON.parse(req.body.post);
-  delete postObject._id;
-  const post = new Post({
+  const postObject = req.body;
+
+  const post = new Posts({
     ...postObject,
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`,
+    postFile: `${req.protocol}://${req.get("host")}/images/${req.file}`,
   });
   post
     .save()
@@ -17,43 +15,57 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.modifyPost = (req, res, next) => {
-  const postObject = req.file
-    ? {
-        ...JSON.parse(req.body.post),
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
+  if (req.params.id || req.auth.admin) {
+    const postObject = req.file
+      ? {
+          ...req.body,
+          postFile: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
+        }
+      : { ...req.body };
+    Posts.findOne({ where: { id: req.params.id } }).then((post) => {
+      if (!req.file || !filename) {
+        Posts.update({ ...postObject }, { where: { id: req.params.id } })
+          .then(() => res.status(200).json({ message: "Post modifié !" }))
+          .catch((error) => res.status(400).json({ error }));
+      } else {
+        const filename = post.postFile.split("/images/")[1];
+        fs.unlink(`images/${filename}`, () => {
+          Posts.update({ ...postObject }, { where: { id: req.params.id } })
+            .then(() => res.status(200).json({ message: "Post modifié !" }))
+            .catch((error) => res.status(400).json({ error }));
+        });
       }
-    : { ...req.body };
-  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: "Post modifié !" }))
-    .catch((error) => res.status(405).json({ error }));
+    });
+  } else {
+    return res.status(401).json({
+      error: new error("Requête non autorisée !"),
+    });
+  }
 };
 
 exports.deletePost = (req, res, next) => {
-  Post.findOne({ _id: req.params.id }).then((post) => {
-    if (!post) {
-      return res.status(405).json({
-        error: new error("Post non trouvé !"),
-      });
-    }
-    if (post.userId !== req.auth.userId) {
-      return res.status(405).json({
-        error: new error("Requête non autorisée !"),
-      });
-    }
-
-    Post.findOne({ _id: req.params.id })
-      .then((post) => {
-        const filename = post.imageUrl.split("/images/")[1];
-        fs.unlink(`images/${filename}`, () => {
-          Post.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: "Post supprimé !" }))
-            .catch((error) => res.status(405).json({ error }));
+  Posts.findOne({ where: { id: req.params.id } })
+    .then((post) => {
+      if (!post) {
+        return res.status(404).json({
+          error: new error("Post non trouvé !"),
         });
-      })
-      .catch((error) => res.status(500).json({ error }));
-  });
+      }
+      if (post.id !== req.auth.postId) {
+        return res.status(401).json({
+          error: new error("Requête non autorisée !"),
+        });
+      }
+      const filename = post.imageUrl.split("/images/")[1];
+      fs.unlink(`images/${filename}`, () => {
+        Posts.destroy({ where: { id: req.params.id } })
+          .then(() => res.status(200).json({ message: "Post supprimé !" }))
+          .catch((error) => res.status(405).json({ error }));
+      });
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getOnePost = async (req, res, next) => {
@@ -66,10 +78,7 @@ exports.getOnePost = async (req, res, next) => {
 };
 
 exports.getAllPosts = async (req, res, next) => {
-  const listOfPosts = await Posts.findAll({ include: [Likes] });
-  const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
-  res
-    .json({ listOfPosts: listOfPosts, likedPosts: likedPosts })
+  Posts.findAll()
     .then((posts) => res.status(200).json(posts))
-    .catch((error) => res.status(405).json({ error }));
+    .catch((error) => res.status(400).json({ error }));
 };
