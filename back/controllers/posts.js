@@ -26,13 +26,19 @@ exports.modifyPost = (req, res, next) => {
       : { ...req.body };
     Posts.findOne({ where: { id: req.params.id } }).then((post) => {
       if (!req.file || !filename) {
-        Posts.update({ ...postObject }, { where: { id: req.params.id } })
+        Posts.update(
+          { ...postObject, id: req.params.id },
+          { where: { id: req.params.id } }
+        )
           .then(() => res.status(200).json({ message: "Post modifié !" }))
           .catch((error) => res.status(400).json({ error }));
       } else {
         const filename = post.postFile.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
-          Posts.update({ ...postObject }, { where: { id: req.params.id } })
+          Posts.update(
+            { ...postObject, id: req.params.id },
+            { where: { id: req.params.id } }
+          )
             .then(() => res.status(200).json({ message: "Post modifié !" }))
             .catch((error) => res.status(400).json({ error }));
         });
@@ -53,16 +59,19 @@ exports.deletePost = (req, res, next) => {
           error: new error("Post non trouvé !"),
         });
       }
-      if (post.id !== req.auth.postId) {
+      if (admin) {
+        post.id = req.auth.userId;
+      }
+      if (post.id !== req.auth.userId) {
         return res.status(401).json({
           error: new error("Requête non autorisée !"),
         });
       }
-      const filename = post.imageUrl.split("/images/")[1];
+      const filename = post.postFile.split("/images/")[1];
       fs.unlink(`images/${filename}`, () => {
         Posts.destroy({ where: { id: req.params.id } })
           .then(() => res.status(200).json({ message: "Post supprimé !" }))
-          .catch((error) => res.status(405).json({ error }));
+          .catch((error) => res.status(400).json({ error }));
       });
     })
     .catch((error) => res.status(500).json({ error }));
