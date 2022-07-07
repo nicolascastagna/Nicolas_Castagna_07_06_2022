@@ -1,4 +1,4 @@
-const { Posts, Likes } = require("../models");
+const { Posts, Users, Likes } = require("../models");
 const fs = require("fs");
 
 exports.createPost = (req, res, next) => {
@@ -16,7 +16,13 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.modifyPost = (req, res, next) => {
-  const admin = req.auth.admin === req.auth.userId;
+  let admin = false;
+  console.log(req.auth);
+  Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
+    if (user.admin === true) {
+      admin = true;
+    }
+  });
   Posts.findOne({ where: { id: req.params.id } }).then((post) => {
     if (post.UserId == req.auth.userId || admin) {
       const postObject = req.file

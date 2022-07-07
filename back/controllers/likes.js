@@ -2,22 +2,22 @@ const { Posts, Likes } = require("../models");
 
 exports.getLike = (req, res, next) => {
   try {
-    const { PostId } = req.body;
-    const UserId = req.user.id;
+    const PostId = req.params.id;
+    const UserId = req.auth.userId;
 
-    const found = Likes.findOne({
-      where: { postId: PostId, userId: UserId },
+    Likes.findOne({
+      where: { PostId: PostId, UserId: UserId },
+    }).then((like) => {
+      if (!like) {
+        Likes.create({ PostId: PostId, UserId: UserId });
+        res.json({ liked: true });
+      } else {
+        Likes.destroy({
+          where: { PostId: PostId, UserId: UserId },
+        });
+        res.json({ liked: false });
+      }
     });
-
-    if (!found) {
-      Likes.create({ postId: PostId, userId: UserId });
-      res.json({ liked: true });
-    } else {
-      Likes.destroy({
-        where: { postId: PostId, userId: UserId },
-      });
-      res.json({ liked: false });
-    }
   } catch {
     (error) => res.status(500).json(error);
   }

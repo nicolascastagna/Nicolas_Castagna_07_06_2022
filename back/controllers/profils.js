@@ -3,16 +3,18 @@ const fs = require("fs");
 require("dotenv").config();
 
 exports.getProfil = (req, res, next) => {
-  const Users = req.params.id;
-
-  const post = Users.findByPk(id, {
-    attributes: { exclude: ["password"] },
-  });
-  res.json(post);
+  Users.findOne({
+    where: { id: req.params.id },
+    attributes: {
+      exclude: ["password"],
+    },
+  })
+    .then((profil) => res.status(200).json(profil))
+    .catch((error) => res.status(404).json({ error }));
 };
 
 exports.getAllProfils = (req, res, next) => {
-  Users.findAll({ attributes: { exclude: ["id", "email", "password"] } })
+  Users.findAll({ attributes: { exclude: ["password"] } })
     .then((users) => res.status(200).json(users))
     .catch((error) => res.status(400).json({ error }));
 };
@@ -20,24 +22,32 @@ exports.getAllProfils = (req, res, next) => {
 exports.modifyProfil = (req, res, next) => {
   const userProfil = req.file
     ? {
-        ...JSON.parse(req.body.user),
+        ...req.body,
         userPicture: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,
       }
     : { ...req.body };
+  // Compare l'userId de l'utilisateur avec celui authentifier
   Users.findOne({ where: { id: req.params.id } }).then((user) => {
+    if (user.id !== req.auth.userId) {
+      return res.status(401).json({
+        error: "Requête non autorisée !",
+      });
+    }
     if (!req.file) {
-      Users.updateOne(
-        { where: { id: req.params.id } },
-        { ...userProfil, id: req.params.id }
+      Users.update(
+        { ...userProfil, id: req.params.id },
+        { where: { id: req.params.id } }
       )
         .then(() => res.status(200).json({ message: "Profil modifié !" }))
         .catch((error) => res.status(400).json({ error }));
-    } else {
+    }
+    // Supprime et remplace par la nouvelle image
+    else {
       const filename = user.userPicture.split("/images/")[1];
       fs.unlink(`images/${filename}`, () => {
-        Users.updateOne(
+        Users.update(
           { where: { id: req.params.id } },
           { ...userProfil, id: req.params.id }
         )
