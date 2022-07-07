@@ -1,6 +1,6 @@
-const { Posts, Likes } = require("../models");
+const { Posts, Likes, Users } = require("../models");
 
-exports.getLike = (req, res, next) => {
+exports.postLike = (req, res, next) => {
   try {
     const PostId = req.params.id;
     const UserId = req.auth.userId;
@@ -24,11 +24,7 @@ exports.getLike = (req, res, next) => {
 };
 
 exports.getAllLikes = async (req, res, next) => {
-  try {
-    const listOfPosts = await Posts.findAll({ include: [Likes] });
-    const likedPosts = await Likes.findAll({ where: { userId: req.user.id } });
-    res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
-  } catch {
-    (error) => res.status(500).json(error);
-  }
+  Likes.findAll({ includes: [Users] })
+    .then((likes) => res.status(200).json(likes))
+    .catch((error) => res.status(400).json({ error }));
 };

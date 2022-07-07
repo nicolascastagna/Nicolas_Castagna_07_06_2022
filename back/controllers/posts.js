@@ -1,4 +1,4 @@
-const { Posts, Users, Likes } = require("../models");
+const { Posts, Users } = require("../models");
 const fs = require("fs");
 
 exports.createPost = (req, res, next) => {
@@ -17,7 +17,6 @@ exports.createPost = (req, res, next) => {
 
 exports.modifyPost = (req, res, next) => {
   let admin = false;
-  console.log(req.auth);
   Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
     if (user.admin === true) {
       admin = true;
@@ -68,23 +67,30 @@ exports.deletePost = (req, res, next) => {
         error: new error("Post non trouvé !"),
       });
     }
-    // Compare userId avec le propriétaire du post pour supprimer
-    if (post.UserId !== req.auth.userId) {
-      return res.status(401).json({
-        error: new error("Requête non autorisée !"),
-      });
-    }
-    Posts.findOne({ where: { id: req.params.id } })
-      .then((post) => {
-        // Suppression de l'image dans le dossier images
-        const filename = post.postFile.split("/images/")[1];
-        fs.unlink(`images/${filename}`, () => {
-          Posts.destroy({ where: { id: req.params.id } })
-            .then(() => res.status(200).json({ message: "Post supprimé !" }))
-            .catch((error) => res.status(400).json({ error }));
+    let admin = false;
+    Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
+      if (user.admin === true) {
+        admin = true;
+      } else {
+        return res.status(401).json({
+          error: new error("Requête non autorisée !"),
         });
-      })
-      .catch((error) => res.status(500).json({ error }));
+      }
+
+      // Compare userId avec le propriétaire du post pour supprimer
+
+      Posts.findOne({ where: { id: req.params.id } })
+        .then((post) => {
+          // Suppression de l'image dans le dossier images
+          const filename = post.postFile.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            Posts.destroy({ where: { id: req.params.id } })
+              .then(() => res.status(200).json({ message: "Post supprimé !" }))
+              .catch((error) => res.status(400).json({ error }));
+          });
+        })
+        .catch((error) => res.status(500).json({ error }));
+    });
   });
 };
 
