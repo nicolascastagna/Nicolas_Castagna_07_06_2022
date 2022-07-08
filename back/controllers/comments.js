@@ -1,45 +1,79 @@
-const { Comments } = require("../models");
+const { Comments, Users, Posts } = require("../models");
 
 exports.createComment = (req, res, next) => {
-  const comment = req.body;
-  const User = req.user.userId;
-  comment.User = User;
-  Comments.create(comment);
-  res.json(comment);
+  const commentsObject = req.body;
+
+  const comments = new Comments({
+    ...commentsObject,
+    userId: req.auth.userId,
+    postId: req.params.id,
+    commentsFile: `${req.protocol}://${req.get("host")}/images/${req.file}`,
+  });
+  comments
+    .save()
+    .then(() => res.status(201).json({ message: "Commentaire créé !" }))
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.getAllComments = (req, res, next) => {
-  const postId = req.params.postId;
-  const comments = Comments.findAll({ where: { PostId: postId } });
-  res.json(comments);
+  Comments.findAll({ includes: [Users, Posts] })
+    .then((comments) => res.status(200).json(comments))
+    .catch((error) => res.status(400).json({ error }));
+};
+
+exports.getOneComment = async (req, res, next) => {
+  const id = req.params.id;
+  const comment = await Comments.findByPk(id);
+  res
+    .json(comment)
+    .then((comments) => res.status(200).json(comments))
+    .catch((error) => res.status(401).json({ error }));
 };
 
 exports.modifyComment = (req, res, next) => {
-  const userComment = req.file
-    ? {
-        ...JSON.parse(req.body.comment),
-        commentsFile: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
-      }
-    : { ...req.body };
+  let admin = false;
+  Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
+    if (user.admin === true) {
+      admin = true;
+    }
+  });
   Comments.findOne({ where: { id: req.params.id } }).then((comment) => {
-    if (!req.file) {
-      Comments.updateOne(
-        { where: { id: req.params.id } },
-        { ...userComment, id: req.params.id }
-      )
-        .then(() => res.status(200).json({ message: "Post modifié !" }))
-        .catch((error) => res.status(400).json({ error }));
+    if (comment.UserId == req.auth.userId || admin) {
+      const commentsObject = req.file
+        ? {
+            ...req.body,
+            commentsFile: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+          }
+        : { ...req.body };
+      Comments.findOne({ where: { id: req.params.id } }).then((comment) => {
+        if (!req.file || !filename) {
+          Comments.update(
+            { ...commentsObject, id: req.params.id },
+            { where: { id: req.params.id } }
+          )
+            .then(() =>
+              res.status(200).json({ message: "Commentaire modifié !" })
+            )
+            .catch((error) => res.status(400).json({ error }));
+        } else {
+          const filename = comment.commentsFile.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            Comments.update(
+              { ...commentsObject, id: req.params.id },
+              { where: { id: req.params.id } }
+            )
+              .then(() =>
+                res.status(200).json({ message: "Commentaire modifié !" })
+              )
+              .catch((error) => res.status(400).json({ error }));
+          });
+        }
+      });
     } else {
-      const filename = comment.commentsFile.split("/images/")[1];
-      fs.unlink(`images/${filename}`, () => {
-        Comments.updateOne(
-          { where: { id: req.params.id } },
-          { ...userComment, id: req.params.id }
-        )
-          .then(() => res.status(200).json({ message: "Post modifié !" }))
-          .catch((error) => res.status(400).json({ error }));
+      return res.status(401).json({
+        error: new error("Requête non autorisée !"),
       });
     }
   });
@@ -52,14 +86,28 @@ exports.deleteComment = (req, res, next) => {
         error: new error("Commentaire non trouvé !"),
       });
     }
-    // Compare userId avec le propriétaire du commentaire pour supprimer
-    if (comment.id !== req.auth.commentId) {
-      return res.status(401).json({
-        error: new error("Requête non autorisée !"),
-      });
-    }
-    Comments.destroy({ where: { id: req.params.id } })
-      .then(() => res.status(200).json({ message: "Commentaire supprimé !" }))
-      .catch((error) => res.status(400).json({ error }));
+    let admin = false;
+    Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
+      if (user.admin === true) {
+        admin = true;
+      } else {
+        return res.status(401).json({
+          error: new error("Requête non autorisée !"),
+        });
+      }
+      Comments.findOne({ where: { id: req.params.id } })
+        .then((comment) => {
+          // Suppression de l'image dans le dossier images
+          const filename = comment.commentsFile.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            Comments.destroy({ where: { id: req.params.id } })
+              .then(() =>
+                res.status(200).json({ message: "Commentaire supprimé !" })
+              )
+              .catch((error) => res.status(400).json({ error }));
+          });
+        })
+        .catch((error) => res.status(500).json({ error }));
+    });
   });
 };

@@ -76,9 +76,6 @@ exports.deletePost = (req, res, next) => {
           error: new error("Requête non autorisée !"),
         });
       }
-
-      // Compare userId avec le propriétaire du post pour supprimer
-
       Posts.findOne({ where: { id: req.params.id } })
         .then((post) => {
           // Suppression de l'image dans le dossier images
