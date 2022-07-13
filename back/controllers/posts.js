@@ -78,13 +78,16 @@ exports.deletePost = (req, res, next) => {
       }
       Posts.findOne({ where: { id: req.params.id } })
         .then((post) => {
-          // Suppression de l'image dans le dossier images
-          const filename = post.postFile.split("/images/")[1];
-          fs.unlink(`images/${filename}`, () => {
-            Posts.destroy({ where: { id: req.params.id } })
-              .then(() => res.status(200).json({ message: "Post supprimé !" }))
-              .catch((error) => res.status(400).json({ error }));
-          });
+          if (post.UserId == req.auth.userId || admin) {
+            const filename = post.postFile.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+              Posts.destroy({ where: { id: req.params.id } })
+                .then(() =>
+                  res.status(200).json({ message: "Post supprimé !" })
+                )
+                .catch((error) => res.status(400).json({ error }));
+            });
+          }
         })
         .catch((error) => res.status(500).json({ error }));
     });

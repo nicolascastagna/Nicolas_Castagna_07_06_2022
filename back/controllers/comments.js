@@ -38,7 +38,7 @@ exports.modifyComment = (req, res, next) => {
     }
   });
   Comments.findOne({ where: { id: req.params.id } }).then((comment) => {
-    if (comment.UserId == req.auth.userId || admin) {
+    if (comment.userId == req.auth.userId || admin) {
       const commentsObject = req.file
         ? {
             ...req.body,
@@ -97,15 +97,16 @@ exports.deleteComment = (req, res, next) => {
       }
       Comments.findOne({ where: { id: req.params.id } })
         .then((comment) => {
-          // Suppression de l'image dans le dossier images
-          const filename = comment.commentsFile.split("/images/")[1];
-          fs.unlink(`images/${filename}`, () => {
-            Comments.destroy({ where: { id: req.params.id } })
-              .then(() =>
-                res.status(200).json({ message: "Commentaire supprimé !" })
-              )
-              .catch((error) => res.status(400).json({ error }));
-          });
+          if (comment.UserId == req.auth.userId || admin) {
+            const filename = comment.commentsFile.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+              Comments.destroy({ where: { id: req.params.id } })
+                .then(() =>
+                  res.status(200).json({ message: "Commentaire supprimé !" })
+                )
+                .catch((error) => res.status(400).json({ error }));
+            });
+          }
         })
         .catch((error) => res.status(500).json({ error }));
     });
