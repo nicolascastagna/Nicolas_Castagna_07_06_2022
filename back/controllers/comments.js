@@ -1,4 +1,5 @@
 const { Comments, Users, Posts } = require("../models");
+const fs = require("fs");
 
 exports.createComment = (req, res, next) => {
   const commentsObject = req.body;
@@ -90,25 +91,25 @@ exports.deleteComment = (req, res, next) => {
     Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
       if (user.admin === true) {
         admin = true;
-      } else {
-        return res.status(401).json({
-          error: new error("Requête non autorisée !"),
-        });
       }
-      Comments.findOne({ where: { id: req.params.id } })
-        .then((comment) => {
-          if (comment.UserId == req.auth.userId || admin) {
-            const filename = comment.commentsFile.split("/images/")[1];
-            fs.unlink(`images/${filename}`, () => {
-              Comments.destroy({ where: { id: req.params.id } })
-                .then(() =>
-                  res.status(200).json({ message: "Commentaire supprimé !" })
-                )
-                .catch((error) => res.status(400).json({ error }));
-            });
-          }
-        })
-        .catch((error) => res.status(500).json({ error }));
     });
+    Comments.findOne({ where: { id: req.params.id } })
+      .then((comment) => {
+        if (comment.UserId == req.auth.userId || admin) {
+          const filename = comment.commentsFile.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            Comments.destroy({ where: { id: req.params.id } })
+              .then(() =>
+                res.status(200).json({ message: "Commentaire supprimé !" })
+              )
+              .catch((error) => res.status(400).json({ error }));
+          });
+        } else {
+          return res.status(401).json({
+            error: new error("Requête non autorisée !"),
+          });
+        }
+      })
+      .catch((error) => res.status(500).json({ error }));
   });
 };

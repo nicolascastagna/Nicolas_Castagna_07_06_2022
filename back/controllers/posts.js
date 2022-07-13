@@ -71,26 +71,24 @@ exports.deletePost = (req, res, next) => {
     Users.findOne({ where: { id: req.auth.userId } }).then((user) => {
       if (user.admin === true) {
         admin = true;
-      } else {
-        return res.status(401).json({
-          error: new error("Requête non autorisée !"),
-        });
       }
-      Posts.findOne({ where: { id: req.params.id } })
-        .then((post) => {
-          if (post.UserId == req.auth.userId || admin) {
-            const filename = post.postFile.split("/images/")[1];
-            fs.unlink(`images/${filename}`, () => {
-              Posts.destroy({ where: { id: req.params.id } })
-                .then(() =>
-                  res.status(200).json({ message: "Post supprimé !" })
-                )
-                .catch((error) => res.status(400).json({ error }));
-            });
-          }
-        })
-        .catch((error) => res.status(500).json({ error }));
     });
+    Posts.findOne({ where: { id: req.params.id } })
+      .then((post) => {
+        if (post.UserId == req.auth.userId || admin) {
+          const filename = post.postFile.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            Posts.destroy({ where: { id: req.params.id } })
+              .then(() => res.status(200).json({ message: "Post supprimé !" }))
+              .catch((error) => res.status(400).json({ error }));
+          });
+        } else {
+          return res.status(401).json({
+            error: new error("Requête non autorisée !"),
+          });
+        }
+      })
+      .catch((error) => res.status(500).json({ error }));
   });
 };
 
