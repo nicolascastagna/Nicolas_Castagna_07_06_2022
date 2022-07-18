@@ -95,7 +95,7 @@ exports.deleteComment = (req, res, next) => {
     });
     Comments.findOne({ where: { id: req.params.id } })
       .then((comment) => {
-        if (comment.UserId == req.auth.userId || admin) {
+        if (comment.userId == req.auth.userId || admin) {
           const filename = comment.commentsFile.split("/images/")[1];
           fs.unlink(`images/${filename}`, () => {
             Comments.destroy({ where: { id: req.params.id } })
