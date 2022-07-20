@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { isExpired, decodeToken } from "react-jwt";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authentification from "./pages/Authentification";
 import Home from "./pages/Home";
@@ -15,12 +14,13 @@ const App = () => {
       const verifyToken = localStorage.getItem("token");
       if (verifyToken) {
         const parseToken = JSON.parse(localStorage.getItem("token"));
-        const myDecodedToken = decodeToken(token);
-        const isMyTokenExpired = isExpired(token);
+        // const myDecodedToken = decodeToken(token);
+        // const isMyTokenExpired = isExpired(token);
 
         // Vide le localstorage si token n'est pas décodable ou expiré
-        if (!myDecodedToken || !isMyTokenExpired) {
+        if (!parseToken || !parseToken.token) {
           localStorage.clear();
+          window.location = "/";
         }
         // Mise à jour du localstorage
       } else {

@@ -17,7 +17,7 @@ const Log = (props) => {
   };
 
   return (
-    <div>
+    <>
       <div className="form-container">
         <ul>
           <li
@@ -40,7 +40,7 @@ const Log = (props) => {
         {signupForm && <Signup />}
         {loginForm && <Login />}
       </div>
-    </div>
+    </>
   );
 };
 

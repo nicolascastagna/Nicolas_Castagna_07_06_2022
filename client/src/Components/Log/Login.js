@@ -9,8 +9,7 @@ const Login = () => {
     e.preventDefault();
 
     // déclaration des div error
-    const emailError = document.querySelector(".email.error");
-    const passwordError = document.querySelector(".password.error");
+    const formError = document.querySelector(".form.error");
 
     axios({
       method: "post",
@@ -24,18 +23,15 @@ const Login = () => {
       // Si jamais il y a une erreur dans la réponse du back :
       .then((res) => {
         console.log(res);
-        if (res.data.error) {
-          emailError.innerHTML = res.data.error.email;
-          passwordError.innerHTML = res.data.error.password;
-        }
+
         // Et s'il n'y a pas d'erreur dans la réponse :
-        else {
-          window.location = "/home";
-          localStorage.setItem("token", JSON.stringify(res.data));
-        }
+        window.location = "/home";
+        localStorage.setItem("token", JSON.stringify(res.data));
       })
       .catch((err) => {
-        console.log(err);
+        formError.innerHTML = err.response.data.error;
+        // passwordError.innerHTML = err.response.data.error.password;
+        console.log(err.response.data.error);
       });
   };
 
@@ -51,7 +47,6 @@ const Login = () => {
         onChange={(e) => setEmail(e.target.value)}
         value={email}
       />
-      <div className="email error"></div>
       <br />
       <label htmlFor="password">Mot de passe</label>
       <br />
@@ -62,7 +57,7 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
         value={password}
       />
-      <div className="password error"></div>
+      <div className="form error"></div>
       <br />
       <input type="submit" value="Se connecter" />
     </form>

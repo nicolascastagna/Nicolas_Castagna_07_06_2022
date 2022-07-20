@@ -38,7 +38,9 @@ exports.login = (req, res, next) => {
   Users.findOne({ where: { email: req.body.email } })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ error: "Utilisateur non trouvé !" });
+        return res
+          .status(401)
+          .json({ error: "Utilisateur ou mot de passe incorrect !" });
       }
       // Compare les mots de passe avec celui "écrit" et enregistré en base de donnée
       bcrypt
