@@ -23,13 +23,15 @@ const Login = () => {
     })
       // Si jamais il y a une erreur dans la réponse du back :
       .then((res) => {
-        if (res.data.errors) {
-          emailError.innerHTML = res.data.errors.email;
-          passwordError.innerHTML = res.data.errors.password;
+        console.log(res);
+        if (res.data.error) {
+          emailError.innerHTML = res.data.error.email;
+          passwordError.innerHTML = res.data.error.password;
         }
         // Et s'il n'y a pas d'erreur dans la réponse :
         else {
-          window.location = "/";
+          window.location = "/home";
+          localStorage.setItem("token", JSON.stringify(res.data));
         }
       })
       .catch((err) => {

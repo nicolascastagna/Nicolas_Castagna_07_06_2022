@@ -1,19 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { isExpired, decodeToken } from "react-jwt";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authentification from "./pages/Authentification";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil";
+import { tokenContext } from "./Components/AppContext";
 
 const App = () => {
+  const [token, setToken] = useState(null);
+
+  // Vérification si le token est dans le localstorage
+  useEffect(() => {
+    const checkToken = () => {
+      const verifyToken = localStorage.getItem("token");
+      if (verifyToken) {
+        const parseToken = JSON.parse(localStorage.getItem("token"));
+        const myDecodedToken = decodeToken(token);
+        const isMyTokenExpired = isExpired(token);
+
+        // Vide le localstorage si token n'est pas décodable ou expiré
+        if (!myDecodedToken || !isMyTokenExpired) {
+          localStorage.clear();
+        }
+        // Mise à jour du localstorage
+      } else {
+        localStorage.setItem("token", verifyToken);
+      }
+    };
+    checkToken();
+  }, [token]);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Authentification />} />
-        <Route path="/profil" element={<Profil />} />
-        <Route path="/*" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    <tokenContext.Provider value={{ token, setToken }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Authentification />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/profil" element={<Profil />} />
+          <Route path="/*" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+    </tokenContext.Provider>
   );
 };
 
