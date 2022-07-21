@@ -1,0 +1,16 @@
+.nav-menu {
+    display: flex;
+    justify-content: space-around;
+    background: turquoise;
+    height: 50px;
+    align-items: center;
+    font-size: 18px;
+    box-shadow: 18px 1px 0px $color-3;
+    & a {
+        text-decoration: none;
+        color: black;
+    }
+}
+#log-out {
+    cursor: pointer;
+}

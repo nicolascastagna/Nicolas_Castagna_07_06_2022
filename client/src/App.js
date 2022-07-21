@@ -14,8 +14,6 @@ const App = () => {
       const verifyToken = localStorage.getItem("token");
       if (verifyToken) {
         const parseToken = JSON.parse(localStorage.getItem("token"));
-        // const myDecodedToken = decodeToken(token);
-        // const isMyTokenExpired = isExpired(token);
 
         // Vide le localstorage si token n'est pas décodable ou expiré
         if (!parseToken || !parseToken.token) {

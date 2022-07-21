@@ -56,6 +56,7 @@ const Signup = () => {
     <>
       {formSubmit ? (
         <>
+          <Login />
           <span></span>
           <h4 className="success">
             Enregistrement réussi, veuillez vous connecter
