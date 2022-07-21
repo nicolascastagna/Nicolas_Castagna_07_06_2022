@@ -20,18 +20,17 @@ const Login = () => {
         password,
       },
     })
-      // Si jamais il y a une erreur dans la réponse du back :
+      // Si pas d'erreur dans la réponse du back :
       .then((res) => {
         console.log(res);
-
-        // Et s'il n'y a pas d'erreur dans la réponse :
+        // Stock la data de l'utilisateur au localstorage
         window.location = "/home";
         localStorage.setItem("token", JSON.stringify(res.data));
       })
+      // S'il y a une erreur dans la réponse du back
       .catch((err) => {
-        formError.innerHTML = err.response.data.error;
-        // passwordError.innerHTML = err.response.data.error.password;
         console.log(err.response.data.error);
+        formError.innerHTML = err.response.data.error;
       });
   };
 

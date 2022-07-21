@@ -14,10 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: "email",
       allowNull: false,
+      required: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      required: true,
     },
     userPicture: {
       type: DataTypes.STRING,
@@ -27,10 +29,12 @@ module.exports = (sequelize, DataTypes) => {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+      required: true,
     },
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+      required: true,
     },
   });
   Users.associate = (models) => {
