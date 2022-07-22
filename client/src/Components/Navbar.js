@@ -13,6 +13,9 @@ const Navbar = () => {
       ) : (
         <ul>
           <div className="nav-menu">
+            <div className="img-container">
+              <img src="./img/icon.png" alt="icon" />
+            </div>
             <li className="welcome">
               <h4>Hello firstName + lastName</h4>
             </li>
