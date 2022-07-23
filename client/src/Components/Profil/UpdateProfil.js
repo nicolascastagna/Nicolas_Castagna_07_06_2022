@@ -10,6 +10,10 @@ const UpdateProfil = () => {
   const [profilePicture, setProfilePicture] = useState("");
   const [file, setFile] = useState();
 
+  const [formSubmit, setFormSubmit] = useState(false);
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+
   useEffect(() => {
     const dataProfil = async () => {
       const res = await axios.get(
@@ -24,13 +28,13 @@ const UpdateProfil = () => {
       setUserData(res.data);
     };
     dataProfil();
-  }, []);
+  }, [id, accessToken]);
 
   const handlePicture = (e) => {
     e.preventDefault();
     const data = new FormData();
     data.append("userId", userData.id);
-    data.append("file", profilePicture);
+    data.append("file", file);
 
     axios
       .put(`${process.env.REACT_APP_API_URL}profil/${id}`, data, {
@@ -67,6 +71,29 @@ const UpdateProfil = () => {
     }
   };
 
+  const handleUser = () => {
+    axios
+      .put(`${process.env.REACT_APP_API_URL}profil/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          firstName,
+          lastName,
+        },
+      })
+
+      .then((res) => {
+        setFormSubmit(true);
+        localStorage.setItem("token", res);
+      })
+
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <section className="profil-container">
       <div className="profil-container-img">
@@ -81,7 +108,7 @@ const UpdateProfil = () => {
           <input
             type="file"
             id="file"
-            name="userPicture"
+            name="profilePicture"
             accept=".jpg, .jpeg, .png"
             onChange={(e) => setProfilePicture(e.target.files[0])}
           />
@@ -89,6 +116,42 @@ const UpdateProfil = () => {
           <input type="submit" value="Envoyer" />
         </form>
       </div>
+      {formSubmit ? (
+        <>
+          <span></span>
+          <h4 className="success">Modification enregistré !</h4>
+        </>
+      ) : (
+        <div className="container-profil-user">
+          <form action="" onSubmit={handleUser} id="update-profil">
+            <label htmlFor="firstName">Prénom</label>
+            <br />
+            <input
+              type="text"
+              name="firstName"
+              id="firstName"
+              placeholder="Ecrivez votre nouveau prénom..."
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <div className="firstName error"></div>
+            <label htmlFor="lastName">Nom</label>
+            <br />
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              placeholder="Ecrivez votre nouveau nom..."
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <div className="lastName error"></div>
+            <input
+              type="submit"
+              value="Valider les modifications"
+              onSubmit={handleUser}
+            />
+          </form>
+        </div>
+      )}
       <div className="delete-container">
         <button className="delete-profil" onClick={handleDelete}>
           Supprimer mon profil
