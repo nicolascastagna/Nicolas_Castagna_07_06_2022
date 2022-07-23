@@ -22,4 +22,11 @@
 
 #log-out {
     cursor: pointer;
+    & img {
+        width: 80%;
+    }
+}
+
+#photo-profil {
+    width: 90%;
 }

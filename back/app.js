@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 const app = express();
 // extrait le corps JSON
 app.use(express.json());
@@ -30,6 +31,9 @@ const corsConfig = {
 app.use(cors(corsConfig));
 
 app.use(bodyParser.json());
+
+// traite les requêtes vers /images
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Routes
 app.use("/posts", postRoutes);

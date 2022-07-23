@@ -29,7 +29,7 @@ const App = () => {
   }, [token]);
 
   return (
-    <tokenContext.Provider value={{ token }}>
+    <tokenContext.Provider value={{ token, setToken }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Authentification />} />

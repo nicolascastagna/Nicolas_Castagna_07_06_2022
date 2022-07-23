@@ -24,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
     userPicture: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "https://ibb.co/PDCzcCG",
     },
     firstName: {
       type: DataTypes.STRING,

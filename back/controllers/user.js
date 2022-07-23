@@ -8,6 +8,7 @@ require("dotenv").config();
 
 // Création utilisateur et mot de passe hash avec bcrypt
 exports.signup = (req, res, next) => {
+  const pictureDefault = `${req.protocol}://${req.get("host")}/images/user.png`;
   try {
     bcrypt
       // "saler" le mot de passe 10 fois avec la méthode hash de bcrypt
@@ -18,6 +19,7 @@ exports.signup = (req, res, next) => {
           password: hash,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
+          userPicture: pictureDefault,
         });
 
         if (

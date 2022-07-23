@@ -10,7 +10,7 @@ const Logout = () => {
 
   return (
     <h4 onClick={logout} id="log-out">
-      Se déconnecter
+      <img src="./img-project/logout.png" alt="logout" />
     </h4>
   );
 };

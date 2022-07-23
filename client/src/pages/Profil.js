@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { tokenContext } from "../Components/AppContext";
 import Navbar from "../Components/Navbar";
+import UpdateProfil from "../Components/Profil/UpdateProfil";
 
 const Profil = () => {
+  const { token } = useContext(tokenContext);
+
   return (
-    <div>
+    <div className="profil-page">
       <Navbar />
-      <div>Voici le profil</div>
+      {!token ? <UpdateProfil /> : <Navigate to="/" />}
     </div>
   );
 };
