@@ -10,9 +10,11 @@ const UpdateProfil = () => {
   const [profilePicture, setProfilePicture] = useState("");
   const [file, setFile] = useState();
 
+  const emailError = document.querySelector(".email-profil.error");
   const [formSubmit, setFormSubmit] = useState(false);
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const dataProfil = async () => {
@@ -28,13 +30,13 @@ const UpdateProfil = () => {
       setUserData(res.data);
     };
     dataProfil();
-  }, [id, accessToken]);
+  }, [id]);
 
   const handlePicture = (e) => {
     e.preventDefault();
     const data = new FormData();
     data.append("userId", userData.id);
-    data.append("file", file);
+    data.append("file", profilePicture);
 
     axios
       .put(`${process.env.REACT_APP_API_URL}profil/${id}`, data, {
@@ -72,26 +74,32 @@ const UpdateProfil = () => {
   };
 
   const handleUser = () => {
-    axios
-      .put(`${process.env.REACT_APP_API_URL}profil/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        data: {
-          firstName,
-          lastName,
-        },
-      })
+    const regexEmail = !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email === regexEmail && email.length > 3) {
+      axios
+        .put(`${process.env.REACT_APP_API_URL}profil/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          data: {
+            firstName,
+            lastName,
+            email,
+          },
+        })
 
-      .then((res) => {
-        setFormSubmit(true);
-        localStorage.setItem("token", res);
-      })
+        .then((res) => {
+          setFormSubmit(true);
+        })
 
-      .catch((err) => {
-        console.error(err);
-      });
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      emailError.innerHTML =
+        "Une erreur s'est produite dans la saisie de l'adresse mail";
+    }
   };
 
   return (
@@ -108,7 +116,7 @@ const UpdateProfil = () => {
           <input
             type="file"
             id="file"
-            name="profilePicture"
+            name="userPicture"
             accept=".jpg, .jpeg, .png"
             onChange={(e) => setProfilePicture(e.target.files[0])}
           />
@@ -133,7 +141,7 @@ const UpdateProfil = () => {
               placeholder="Ecrivez votre nouveau prénom..."
               onChange={(e) => setFirstName(e.target.value)}
             />
-            <div className="firstName error"></div>
+            <div className="firstName-profil error"></div>
             <label htmlFor="lastName">Nom</label>
             <br />
             <input
@@ -143,11 +151,22 @@ const UpdateProfil = () => {
               placeholder="Ecrivez votre nouveau nom..."
               onChange={(e) => setLastName(e.target.value)}
             />
-            <div className="lastName error"></div>
+            <div className="lastName-profil error"></div>
+            <label htmlFor="email">Email</label>
+            <br />
             <input
-              type="submit"
+              type="text"
+              name="email"
+              id="email"
+              placeholder="Ecrivez votre nouvelle adresse mail..."
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className="email-profil error"></div>
+            <input
+              type="button"
+              id="confirm-input"
               value="Valider les modifications"
-              onSubmit={handleUser}
+              onClick={handleUser}
             />
           </form>
         </div>
