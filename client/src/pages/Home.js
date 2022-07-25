@@ -1,11 +1,14 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
+import Thread from "../Components/Thread";
 
 const Home = () => {
   return (
-    <div>
+    <div className="home">
       <Navbar />
-      <h2>page d'accueil posts</h2>
+      <div className="main">
+        <Thread />
+      </div>
     </div>
   );
 };

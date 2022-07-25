@@ -7,7 +7,6 @@ const UpdateProfil = () => {
   // Récupère le token
   const accessToken = JSON.parse(localStorage.getItem("token")).token;
   const [userData, setUserData] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
   const [file, setFile] = useState();
 
   const emailError = document.querySelector(".email-profil.error");
@@ -35,8 +34,8 @@ const UpdateProfil = () => {
   const handlePicture = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("userId", userData.id);
-    data.append("file", profilePicture);
+    data.append("userId", userData.userPicture);
+    data.append("file", file);
 
     axios
       .put(`${process.env.REACT_APP_API_URL}profil/${id}`, data, {
@@ -118,7 +117,7 @@ const UpdateProfil = () => {
             id="file"
             name="userPicture"
             accept=".jpg, .jpeg, .png"
-            onChange={(e) => setProfilePicture(e.target.files[0])}
+            onChange={(e) => setFile(e.target.files[0])}
           />
           <br />
           <input type="submit" value="Envoyer" />
