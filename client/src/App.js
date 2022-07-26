@@ -3,10 +3,20 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authentification from "./pages/Authentification";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil";
-import { tokenContext } from "./Components/AppContext";
+import { dataContext } from "./Components/AppContext";
+import { useDispatch } from "react-redux";
+import {
+  deleteUser,
+  getUser,
+  updateUser,
+  uploadPicture,
+} from "./actions/user.action";
+import { getUsers } from "./actions/users.action";
+import { getAllPosts, getPost } from "./actions/post.action";
 
 const App = () => {
-  const [token, setToken] = useState(null);
+  const [dataUser, setDataUser] = useState(null);
+  const dispatch = useDispatch();
 
   // Vérification si le token est dans le localstorage
   useEffect(() => {
@@ -26,10 +36,17 @@ const App = () => {
       }
     };
     checkToken();
-  }, [token]);
+    dispatch(getUser());
+    dispatch(getUsers());
+    // dispatch(uploadPicture());
+    // dispatch(updateUser());
+    // dispatch(deleteUser());
+    dispatch(getAllPosts());
+    dispatch(getPost());
+  }, [dataUser, dispatch]);
 
   return (
-    <tokenContext.Provider value={{ token, setToken }}>
+    <dataContext.Provider value={{ dataUser, setDataUser }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Authentification />} />
@@ -38,7 +55,7 @@ const App = () => {
           <Route path="/*" element={<Home />} />
         </Routes>
       </BrowserRouter>
-    </tokenContext.Provider>
+    </dataContext.Provider>
   );
 };
 

@@ -1,34 +1,18 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { tokenContext } from "./AppContext";
+import { dataContext } from "./AppContext";
 import Logout from "./Logout";
 
 const Navbar = () => {
-  const id = JSON.parse(localStorage.getItem("token")).userId;
-  const accessToken = JSON.parse(localStorage.getItem("token")).token;
-  const [userData, setUserData] = useState("");
-  const { token } = useContext(tokenContext);
+  const { dataUser } = useContext(dataContext);
 
-  useEffect(() => {
-    const dataProfil = async () => {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}profil/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setUserData(res.data);
-    };
-    dataProfil();
-  }, [userData]);
+  const userData = useSelector((state) => state.userReducer);
 
   return (
     <nav className="nav-container">
-      {token ? (
+      {dataUser ? (
         <ul></ul>
       ) : (
         <ul>
@@ -39,11 +23,11 @@ const Navbar = () => {
               </NavLink>
             </div>
             <li className="welcome">
-              <h4>Hello {userData.firstName}</h4>
+              <h4>Hello {userData.dataUser.firstName}</h4>
             </li>
             <NavLink to="/profil">
               <img
-                src={userData.userPicture}
+                src={userData.dataUser.userPicture}
                 alt="photo-profil"
                 id="photo-profil"
               />

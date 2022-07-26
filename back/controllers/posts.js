@@ -93,12 +93,11 @@ exports.deletePost = (req, res, next) => {
 };
 
 exports.getOnePost = async (req, res, next) => {
-  const id = req.params.id;
-  const post = await Posts.findByPk(id);
-  res
-    .json(post)
-    .then((post) => res.status(200).json(post))
-    .catch((error) => res.status(401).json({ error }));
+  Posts.findOne({
+    where: { id: req.params.id },
+  })
+    .then((profil) => res.status(200).json(profil))
+    .catch((error) => res.status(404).json({ error }));
 };
 
 exports.getAllPosts = async (req, res, next) => {

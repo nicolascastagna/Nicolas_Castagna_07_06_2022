@@ -1,70 +1,31 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPosts, getPost } from "../actions/post.action";
+import { isEmpty } from "../Utils";
+import { dataContext } from "./AppContext";
 import CardPost from "./Post/CardPost";
-import { isEmpty } from "./Utils";
 
 const Thread = () => {
-  const [postData, setPostData] = useState([]);
-  const [postText, setPostText] = useState([]);
-  const [content, setContent] = useState("");
-  const [error, setError] = useState(false);
+  // const dataUser = useContext(dataContext);
+  const posts = useSelector((state) => state.allPostsReducer.allPostsData);
+  const [loadPosts, setLoadPosts] = useState(false);
+  const dispatch = useDispatch();
 
-  const accessToken = JSON.parse(localStorage.getItem("token")).token;
-  const id = JSON.parse(localStorage.getItem("token")).userId;
-
-  const getData = () => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}posts/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => setPostData(res.data));
-  };
-  useEffect(() => getData(), []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (content.length < 15) {
-      setError(true);
-    } else {
-      axios.post(`${process.env.REACT_APP_API_URL}posts/`, {
-        headers: {
-          Authorization: `Bearer + ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        postText: "",
-        userId: "",
-        postDate: Date.now(),
-      });
-      setError(false);
-      setPostText("");
-      setContent("");
-      getData();
+  useEffect(() => {
+    if (loadPosts) {
+      dispatch(getAllPosts());
+      setLoadPosts(false);
     }
-  };
+  }, [loadPosts, dispatch]);
 
   return (
-    <div className="blog-container">
-      <h1>Blog</h1>
-
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <textarea
-          style={{ border: error ? "1px solid red" : "1px solid #61dafb" }}
-          placeholder="Message"
-          onChange={(e) => setContent(e.target.value)}
-          value={content}
-        ></textarea>
-        {error && <p>Veuillez écrire un minimum de 15 caractères</p>}
-        <input type="submit" value="Envoyer" />
-      </form>
+    <div className="thread-container">
+      <h1>Fil d'actualité</h1>
       <ul>
-        {postData
-          .sort((a, b) => b.postDate - a.postDate)
-          .map((post) => (
-            <CardPost key={post.id} article={post} />
-          ))}
+        {!isEmpty(posts[0]) &&
+          posts.map((post) => {
+            return <CardPost post={post} key={post.id} />;
+          })}
       </ul>
     </div>
   );

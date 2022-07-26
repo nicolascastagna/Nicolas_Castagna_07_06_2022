@@ -30,7 +30,7 @@ exports.modifyProfil = (req, res, next) => {
     : { ...req.body };
   // Compare l'userId de l'utilisateur avec celui authentifier
   Users.findOne({ where: { id: req.params.id } }).then((user) => {
-    if (user.id !== req.auth.userId) {
+    if (req.params.id !== req.auth.userId) {
       return res.status(401).json({
         error: "Requête non autorisée !",
       });
