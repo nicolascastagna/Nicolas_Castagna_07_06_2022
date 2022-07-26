@@ -5,7 +5,7 @@ import { deleteUser, updateUser } from "../../actions/user.action";
 import UploadImg from "./UploadImg";
 
 const UpdateProfil = () => {
-  const userData = useSelector((state) => state.userReducer);
+  const userData = useSelector((state) => state.userReducer.dataUser);
   const dispatch = useDispatch();
 
   const emailError = document.querySelector(".email-profil.error");
@@ -31,11 +31,11 @@ const UpdateProfil = () => {
     <section className="profil-container">
       <div className="profil-container-img">
         <h1>
-          Profil de {userData.dataUser.firstName} {userData.dataUser.lastName}
+          Profil de {userData.firstName} {userData.lastName}
         </h1>
         <div className="upload-picture">
           <h3>Photo de profil</h3>
-          <img src={userData.dataUser.userPicture} alt="photo-profil" />
+          <img src={userData.userPicture} alt="photo-profil" />
           <UploadImg />
         </div>
       </div>
