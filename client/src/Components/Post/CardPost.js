@@ -4,6 +4,7 @@ import { updatePost } from "../../actions/post.action";
 import { isEmpty } from "../../Utils";
 import { dateParser } from "../Utils";
 import DeleteCard from "./DeleteCard";
+import LikeButton from "./LikeButton";
 
 const CardPost = ({ post }) => {
   const userData = useSelector((state) => state.userReducer.dataUser);
@@ -29,7 +30,8 @@ const CardPost = ({ post }) => {
             !isEmpty(usersData[0]) &&
             usersData
               .map((user) => {
-                if (user.UserId === post.postId) return user.userPicture;
+                if (user.userId === post.id) return user.userPicture;
+                else return null;
               })
               .join("")
           }
@@ -43,8 +45,9 @@ const CardPost = ({ post }) => {
               {!isEmpty(usersData[0]) &&
                 usersData
                   .map((user) => {
-                    if (user.UserId === post.postId)
+                    if (user.userId === post.PostId)
                       return user.firstName + " " + user.lastName;
+                    else return null;
                   })
                   .join("")}
             </h3>
@@ -73,19 +76,17 @@ const CardPost = ({ post }) => {
             className="card-picture"
           />
         )}
-        {userData.UserId === post.PostId && (
+        {userData.userId === post.postId && (
           <div className="button-container">
             <div onClick={() => setIsUpdated(!isUpdated)}>
               <img src="./img-project/edit.svg" alt="edit" />
             </div>
-            <DeleteCard id={post.PostId} />
+            <DeleteCard id={post.postId} />
           </div>
         )}
       </div>
       <div className="card-footer">
-        <div className="icon-like">
-          <h6>Like button</h6>
-        </div>
+        <LikeButton post={post} />
       </div>
     </div>
   );

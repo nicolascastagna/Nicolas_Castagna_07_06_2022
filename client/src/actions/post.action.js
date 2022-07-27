@@ -5,9 +5,12 @@ export const GET_ALL_POSTS = "GET_ALL_POSTS";
 export const UPDATE_POST = "UPDATE_POST";
 export const DELETE_POST = "DELETE_POST";
 export const CREATE_POST = "CREATE_POST";
+export const LIKE_POST = "LIKE_POST";
+export const UNLIKE_POST = "UNLIKE_POST";
+export const GET_LIKES = "GET_LIKES";
 
 const token = JSON.parse(localStorage.getItem("token"));
-// const id = JSON.parse(localStorage.getItem("token")).userId;
+const userId = JSON.parse(localStorage.getItem("token")).userId;
 
 export const getOnePost = (postId) => {
   return (dispatch) => {
@@ -22,7 +25,7 @@ export const getOnePost = (postId) => {
   };
 };
 
-export const getAllPosts = () => {
+export const getAllPosts = (id) => {
   return (dispatch) => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}posts/`, {
@@ -75,15 +78,76 @@ export const createPost = (data) => {
     return axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}posts/`,
-      headers: { Authorization: `Bearer ${token.token}` },
+      data: data,
       withCredentials: true,
-      data,
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
-        dispatch({ type: CREATE_POST, payload: data });
+        dispatch({ type: CREATE_POST, payload: res.data });
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+};
+
+export const likePost = (id) => {
+  return (dispatch) => {
+    return axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_URL}like/${id}`,
+      data: { UserId: userId, PostId: id },
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        dispatch({ type: LIKE_POST, payload: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+export const unlikePost = (PostId, UserId) => {
+  return (dispatch) => {
+    return axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_URL}like/${PostId}`,
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        "Content-Type": "application/json",
+      },
+      data: { UserId: UserId, PostId: PostId },
+    })
+      .then((res) => {
+        dispatch({ type: UNLIKE_POST, payload: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const getLikes = (PostId) => {
+  return (dispatch) => {
+    return axios
+      .get(`${process.env.REACT_APP_API_URL}post/${PostId}/like`, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        dispatch({
+          type: GET_LIKES,
+          payload: res.data.likes,
+        });
+      })
+      .catch((err) => err);
   };
 };
