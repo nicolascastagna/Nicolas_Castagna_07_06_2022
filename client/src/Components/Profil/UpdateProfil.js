@@ -15,14 +15,7 @@ const UpdateProfil = () => {
   const [email, setEmail] = useState("");
 
   const handleUpdate = () => {
-    dispatch(
-      updateUser(
-        userData.userId,
-        userData.email,
-        userData.firstName,
-        userData.lastName
-      )
-    );
+    dispatch(updateUser(userData.userId, email, firstName, lastName));
     setUpdateForm(false);
   };
 

@@ -4,6 +4,7 @@ import { getAllPosts, getPost } from "../actions/post.action";
 import { isEmpty } from "../Utils";
 import { dataContext } from "./AppContext";
 import CardPost from "./Post/CardPost";
+import NewPost from "./Post/NewPost";
 
 const Thread = () => {
   const posts = useSelector((state) => state.allPostsReducer.allPostsData);
@@ -16,6 +17,7 @@ const Thread = () => {
   return (
     <div className="thread-container">
       <h1>Fil d'actualité</h1>
+      <NewPost />
       <ul className="thread">
         {!isEmpty(posts[0]) ? (
           posts.map((post) => {

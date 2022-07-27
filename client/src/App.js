@@ -5,14 +5,8 @@ import Home from "./pages/Home";
 import Profil from "./pages/Profil";
 import { dataContext } from "./Components/AppContext";
 import { useDispatch } from "react-redux";
-import {
-  deleteUser,
-  getUser,
-  updateUser,
-  uploadPicture,
-} from "./actions/user.action";
+import { getAllPosts } from "./actions/post.action";
 import { getUsers } from "./actions/users.action";
-import { getAllPosts, getOnePost } from "./actions/post.action";
 
 const App = () => {
   const [dataUser, setDataUser] = useState(null);
@@ -37,8 +31,8 @@ const App = () => {
     };
     checkToken();
     // dispatch(getUser());
-    // dispatch(getUsers());
-    // dispatch(getOnePost());
+    dispatch(getUsers());
+    // dispatch(getAllPosts());
   }, [dataUser, dispatch]);
 
   return (

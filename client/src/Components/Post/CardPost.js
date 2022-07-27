@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../../actions/post.action";
-import { getUsers } from "../../actions/users.action";
 import { isEmpty } from "../../Utils";
 import { dateParser } from "../Utils";
 import DeleteCard from "./DeleteCard";
@@ -14,10 +13,6 @@ const CardPost = ({ post }) => {
   const [textUpdate, setTextUpdate] = useState(null);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
 
   const updateItem = () => {
     if (textUpdate) {
@@ -34,7 +29,7 @@ const CardPost = ({ post }) => {
             !isEmpty(usersData[0]) &&
             usersData
               .map((user) => {
-                if (user.UserId === post.PostId) return user.userPicture;
+                if (user.UserId === post.postId) return user.userPicture;
               })
               .join("")
           }
@@ -48,7 +43,7 @@ const CardPost = ({ post }) => {
               {!isEmpty(usersData[0]) &&
                 usersData
                   .map((user) => {
-                    if (user.UserId === post.PostId)
+                    if (user.UserId === post.postId)
                       return user.firstName + " " + user.lastName;
                   })
                   .join("")}
