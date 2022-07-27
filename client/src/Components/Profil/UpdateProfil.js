@@ -15,7 +15,14 @@ const UpdateProfil = () => {
   const [email, setEmail] = useState("");
 
   const handleUpdate = () => {
-    dispatch(updateUser(userData.userId, email, firstName, lastName));
+    dispatch(
+      updateUser(
+        userData.userId,
+        userData.email,
+        userData.firstName,
+        userData.lastName
+      )
+    );
     setUpdateForm(false);
   };
 
@@ -23,7 +30,7 @@ const UpdateProfil = () => {
     if (window.confirm("Voulez-vous vraiment supprimer votre profil ?")) {
       dispatch(deleteUser(userData.userId));
       localStorage.clear();
-      <Navigate to="/" />;
+      window.location = "/";
     }
   };
 

@@ -12,7 +12,7 @@ import {
   uploadPicture,
 } from "./actions/user.action";
 import { getUsers } from "./actions/users.action";
-import { getAllPosts, getPost } from "./actions/post.action";
+import { getAllPosts, getOnePost } from "./actions/post.action";
 
 const App = () => {
   const [dataUser, setDataUser] = useState(null);
@@ -36,13 +36,9 @@ const App = () => {
       }
     };
     checkToken();
-    dispatch(getUser());
-    dispatch(getUsers());
-    // dispatch(uploadPicture());
-    // dispatch(updateUser());
-    // dispatch(deleteUser());
-    dispatch(getAllPosts());
-    dispatch(getPost());
+    // dispatch(getUser());
+    // dispatch(getUsers());
+    // dispatch(getOnePost());
   }, [dataUser, dispatch]);
 
   return (

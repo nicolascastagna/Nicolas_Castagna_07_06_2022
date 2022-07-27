@@ -11,14 +11,14 @@ const UploadImg = () => {
     e.preventDefault();
     const data = new FormData();
     data.append("userId", userData.userId);
-    data.append("file", file);
+    data.append("images", file);
 
     dispatch(uploadPicture(data, userData.userPicture));
   };
 
   return (
     <form action="" onSubmit={handlePicture} className="upload-pic">
-      <label htmlFor="file">Changer d'image</label>
+      <label htmlFor="file">Changer la photo de profil</label>
       <input
         type="file"
         id="file"

@@ -3,7 +3,7 @@ import React from "react";
 const Logout = () => {
   const logout = () => {
     if (window.confirm("Voulez-vous vous déconnecter ?")) {
-      localStorage.removeItem("token");
+      localStorage.clear();
       window.location = "/";
     }
   };
