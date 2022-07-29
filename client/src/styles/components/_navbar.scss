@@ -6,6 +6,9 @@
     font-size: 18px;
     box-shadow: 10px 1px 5px $color-3;
     min-width: 320px;
+    @media screen and(max-width: 768px) {
+        min-width: 700px;
+    }
     .img-container {
         width: 15%;
         padding-top: 10px;
@@ -24,9 +27,19 @@
     cursor: pointer;
     & img {
         width: 80%;
+        &:hover {
+            transition: 0.2s;
+            transform: scale(1.1);
+          }
     }
 }
 
 #photo-profil {
-    width: 90%;
+    height: 45px;
+    width: 45px;
+    border-radius: 15px;
+    &:hover {
+        transition: 0.2s;
+        transform: scale(1.1);
+      }
 }

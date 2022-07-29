@@ -31,9 +31,9 @@ const App = () => {
     };
     checkToken();
     // dispatch(getUser());
-    dispatch(getUsers());
+    // dispatch(getUsers());
     // dispatch(getAllPosts());
-  }, [dataUser, dispatch]);
+  }, [dataUser]);
 
   return (
     <dataContext.Provider value={{ dataUser, setDataUser }}>

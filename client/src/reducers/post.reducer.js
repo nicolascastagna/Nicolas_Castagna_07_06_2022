@@ -38,7 +38,7 @@ export default function postReducer(state = initialState, action) {
     case LIKE_POST:
       let arrayData = [...state.postData];
       return arrayData.map((post) => {
-        if (post.PostId === action.payload.PostId) {
+        if (post.id === action.payload.id) {
           return {
             ...post,
             Likes: [action.payload.userId, ...post.PostId],
@@ -48,10 +48,10 @@ export default function postReducer(state = initialState, action) {
       });
     case UNLIKE_POST:
       return state.map((post) => {
-        if (post.id === action.payload.PostId) {
+        if (post.id === action.payload.id) {
           return {
             ...post,
-            liked: post.liked.filter((id) => id !== action.payload.UserId),
+            Likes: post.Likes.filter((id) => id !== action.payload.userId),
           };
         }
         return post;

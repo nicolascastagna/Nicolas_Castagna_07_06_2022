@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 import { deleteUser, updateUser } from "../../actions/user.action";
 import UploadImg from "./UploadImg";
 

@@ -30,22 +30,21 @@ const CardPost = ({ post }) => {
             !isEmpty(usersData[0]) &&
             usersData
               .map((user) => {
-                if (user.userId === post.id) return user.userPicture;
+                if (user.id === post.id) return user.userPicture;
                 else return null;
               })
               .join("")
           }
           alt="user-picture"
         />
-      </div>
-      <div className="card-right">
         <div className="card-header">
           <div className="name-user">
             <h3>
+              {" "}
               {!isEmpty(usersData[0]) &&
                 usersData
                   .map((user) => {
-                    if (user.userId === post.PostId)
+                    if (user.id === post.id)
                       return user.firstName + " " + user.lastName;
                     else return null;
                   })
@@ -54,21 +53,24 @@ const CardPost = ({ post }) => {
           </div>
           <span>{dateParser(post.createdAt)}</span>
         </div>
-
-        {isUpdated === false && <p>{post.postText}</p>}
-        {isUpdated && (
-          <div className="update-post">
-            <textarea
-              defaultValue={post.postText}
-              onChange={(e) => setTextUpdate(e.target.value)}
-            />
-            <div className="button-container">
-              <button className="btn" onClick={updateItem}>
-                Valider modification
-              </button>
+      </div>
+      <div className="card-right">
+        <div className="card-modify">
+          {isUpdated === false && <p>{post.postText}</p>}
+          {isUpdated && (
+            <div className="update-post">
+              <textarea
+                defaultValue={post.postText}
+                onChange={(e) => setTextUpdate(e.target.value)}
+              />
+              <div className="button-modify">
+                <button className="btn" onClick={updateItem}>
+                  Valider modification
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         {post.postFile && (
           <img
             src={post.postFile}
@@ -81,12 +83,10 @@ const CardPost = ({ post }) => {
             <div onClick={() => setIsUpdated(!isUpdated)}>
               <img src="./img-project/edit.svg" alt="edit" />
             </div>
+            <LikeButton post={post} />
             <DeleteCard id={post.postId} />
           </div>
         )}
-      </div>
-      <div className="card-footer">
-        <LikeButton post={post} />
       </div>
     </div>
   );

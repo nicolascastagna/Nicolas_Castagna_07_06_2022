@@ -12,20 +12,20 @@ export const GET_LIKES = "GET_LIKES";
 const token = JSON.parse(localStorage.getItem("token"));
 const userId = JSON.parse(localStorage.getItem("token")).userId;
 
-export const getOnePost = (postId) => {
+export const getOnePost = (id) => {
   return (dispatch) => {
     return axios
-      .get(`${process.env.REACT_APP_API_URL}posts/${postId}`, {
+      .get(`${process.env.REACT_APP_API_URL}posts/${id}`, {
         headers: { Authorization: `Bearer ${token.token}` },
       })
       .then((res) => {
-        dispatch({ type: GET_POSTS, payload: { PostId: postId } });
+        dispatch({ type: GET_POSTS, payload: res.data });
       })
       .catch((err) => console.log(err));
   };
 };
 
-export const getAllPosts = (id) => {
+export const getAllPosts = () => {
   return (dispatch) => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}posts/`, {
@@ -38,7 +38,7 @@ export const getAllPosts = (id) => {
   };
 };
 
-export const updatePost = (postId, postText, postFile) => {
+export const updatePost = (id, postText, postFile) => {
   return (dispatch) => {
     let data = new FormData();
     data.append("postText", postText);
@@ -49,25 +49,25 @@ export const updatePost = (postId, postText, postFile) => {
     if (postText || postFile) {
       return axios({
         method: "put",
-        url: `${process.env.REACT_APP_API_URL}posts/${postId}`,
+        url: `${process.env.REACT_APP_API_URL}posts/${id}`,
         headers: { Authorization: `Bearer ${token.token}` },
       })
         .then((res) => {
-          dispatch({ type: UPDATE_POST, payload: data });
+          dispatch({ type: UPDATE_POST, payload: res.data });
         })
         .catch((err) => console.log(err));
     }
   };
 };
-export const deletePost = (postId) => {
+export const deletePost = (id) => {
   return (dispatch) => {
     return axios({
       method: "delete",
-      url: `${process.env.REACT_APP_API_URL}posts/${postId}`,
+      url: `${process.env.REACT_APP_API_URL}posts/${id}`,
       headers: { Authorization: `Bearer ${token.token}` },
     })
       .then((res) => {
-        dispatch({ type: DELETE_POST, payload: { postId } });
+        dispatch({ type: DELETE_POST, payload: res.data });
       })
       .catch((err) => console.log(err));
   };
@@ -93,15 +93,17 @@ export const createPost = (data) => {
       });
   };
 };
-
 export const likePost = (id) => {
   return (dispatch) => {
+    console.log(id);
+    console.log(userId);
     return axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}like/${id}`,
-      data: { UserId: userId, PostId: id },
+      data: { UserId: userId },
       headers: {
         Authorization: `Bearer ${token.token}`,
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
     })
@@ -113,16 +115,17 @@ export const likePost = (id) => {
       });
   };
 };
-export const unlikePost = (PostId, UserId) => {
+export const unlikePost = (id) => {
   return (dispatch) => {
     return axios({
       method: "post",
-      url: `${process.env.REACT_APP_API_URL}like/${PostId}`,
+      url: `${process.env.REACT_APP_API_URL}like/${id}`,
       headers: {
         Authorization: `Bearer ${token.token}`,
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      data: { UserId: UserId, PostId: PostId },
+      data: { UserId: userId },
     })
       .then((res) => {
         dispatch({ type: UNLIKE_POST, payload: res.data });
@@ -133,10 +136,10 @@ export const unlikePost = (PostId, UserId) => {
   };
 };
 
-export const getLikes = (PostId) => {
+export const getLikes = () => {
   return (dispatch) => {
     return axios
-      .get(`${process.env.REACT_APP_API_URL}post/${PostId}/like`, {
+      .get(`${process.env.REACT_APP_API_URL}like`, {
         headers: {
           Authorization: `Bearer ${token.token}`,
           "Content-Type": "application/json",
@@ -145,7 +148,7 @@ export const getLikes = (PostId) => {
       .then((res) => {
         dispatch({
           type: GET_LIKES,
-          payload: res.data.likes,
+          payload: res.data,
         });
       })
       .catch((err) => err);

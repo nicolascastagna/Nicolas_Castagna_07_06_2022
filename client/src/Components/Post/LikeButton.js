@@ -10,18 +10,19 @@ const LikeButton = ({ post }) => {
   const dispatch = useDispatch();
 
   const like = () => {
-    dispatch(likePost(post.PostId, userData.userId));
+    dispatch(likePost(post.id, dataUser));
     setLiked(true);
   };
+
   const unlike = () => {
-    dispatch(unlikePost(post.PostId, userData.userId));
+    dispatch(unlikePost(post.id, dataUser));
     setLiked(false);
   };
 
   useEffect(() => {
-    if (post.Likes === dataUser) setLiked(true);
+    if (post.id === dataUser) setLiked(true);
     else setLiked(false);
-  }, [dataUser, post.Likes, liked]);
+  }, [dataUser, post.id, liked]);
 
   return (
     <div className="like-container">
