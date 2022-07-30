@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { getUser } from "../actions/user.action";
 import { dataContext } from "./AppContext";
 import Logout from "./Logout";
@@ -17,7 +17,7 @@ const Navbar = () => {
   return (
     <nav className="nav-container">
       {dataUser ? (
-        <ul></ul>
+        <Navigate to="/" />
       ) : (
         <ul>
           <div className="nav-menu">

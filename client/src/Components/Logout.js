@@ -1,9 +1,10 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 
 const Logout = () => {
   const logout = () => {
     if (window.confirm("Voulez-vous vous déconnecter ?")) {
-      localStorage.clear();
+      localStorage.setItem("token", null);
       window.location = "/";
     }
   };

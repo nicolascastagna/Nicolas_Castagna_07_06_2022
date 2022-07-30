@@ -21,7 +21,7 @@ export default function postReducer(state = initialState, action) {
       };
     case UPDATE_POST:
       return state.map((post) => {
-        if (post.id === action.payload.PostId) {
+        if (post.id === action.payload.id) {
           return {
             ...post,
             postText: action.payload.postText,

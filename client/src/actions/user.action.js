@@ -5,14 +5,14 @@ export const UPLOAD_PICTURE = "UPLOAD_PICTURE";
 export const UPDATE_USER = "UPDATE_USER";
 export const DELETE_USER = "DELETE_USER";
 
-const id = JSON.parse(localStorage.getItem("token")).userId;
-const token = JSON.parse(localStorage.getItem("token")).token;
+const token = JSON.parse(localStorage.getItem("token"));
 
 export const getUser = () => {
+  const userId = JSON.parse(localStorage.getItem("token")).userId;
   return (dispatch) => {
     return axios
-      .get(`${process.env.REACT_APP_API_URL}profil/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      .get(`${process.env.REACT_APP_API_URL}profil/${userId}`, {
+        headers: { Authorization: "Bearer " + token.token },
       })
       .then((res) => {
         dispatch({ type: GET_USER, payload: res.data });
@@ -21,7 +21,7 @@ export const getUser = () => {
   };
 };
 
-export const uploadPicture = (picture) => {
+export const uploadPicture = (picture, id) => {
   const data = new FormData();
   data.append("userId", token.userId);
   if (typeof images === "object") {
@@ -30,7 +30,7 @@ export const uploadPicture = (picture) => {
   return (dispatch) => {
     return axios
       .put(`${process.env.REACT_APP_API_URL}posts/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: "Bearer " + token.token },
         "Content-Type": "application/json",
         withCredentials: true,
         data: { ...data },
@@ -42,7 +42,7 @@ export const uploadPicture = (picture) => {
   };
 };
 
-export const updateUser = (firstName, lastName, email) => {
+export const updateUser = (id, firstName, lastName, email) => {
   return (dispatch) => {
     const data = new FormData();
     data.append("firstName", firstName);
@@ -51,7 +51,7 @@ export const updateUser = (firstName, lastName, email) => {
     return axios({
       method: "PUT",
       url: `${process.env.REACT_APP_API_URL}profil/${id}`,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: "Bearer " + token.token },
       "Content-Type": "application/json",
       withCredentials: true,
       data: { ...data },
@@ -61,11 +61,11 @@ export const updateUser = (firstName, lastName, email) => {
   };
 };
 
-export const deleteUser = () => {
+export const deleteUser = (id) => {
   return (dispatch) => {
     return axios
       .delete(`${process.env.REACT_APP_API_URL}profil/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: "Bearer " + token.token },
       })
       .then((res) => {
         dispatch({ type: DELETE_USER, payload: res.data });

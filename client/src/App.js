@@ -7,6 +7,7 @@ import { dataContext } from "./Components/AppContext";
 import { useDispatch } from "react-redux";
 import { getAllPosts } from "./actions/post.action";
 import { getUsers } from "./actions/users.action";
+import { getUser } from "./actions/user.action";
 
 const App = () => {
   const [dataUser, setDataUser] = useState(null);
@@ -30,10 +31,11 @@ const App = () => {
       }
     };
     checkToken();
-    // dispatch(getUser());
-    // dispatch(getUsers());
-    // dispatch(getAllPosts());
-  }, [dataUser]);
+    if (dataUser) {
+      dispatch(getUser(dataUser));
+      dispatch(getUsers());
+    }
+  }, [dispatch, dataUser]);
 
   return (
     <dataContext.Provider value={{ dataUser, setDataUser }}>

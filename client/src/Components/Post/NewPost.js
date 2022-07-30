@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { createPost, getOnePost } from "../../actions/post.action";
+import { createPost, getPost } from "../../actions/post.action";
 import { timestampParser } from "../Utils";
 
 const NewPost = () => {
@@ -19,7 +19,7 @@ const NewPost = () => {
       if (file) data.append("file", file);
 
       await dispatch(createPost(data));
-      dispatch(getOnePost());
+      dispatch(getPost());
       cancelPost();
     } else {
       alert("Veuillez entrer un message");
@@ -40,7 +40,7 @@ const NewPost = () => {
   return (
     <div className="post-container">
       <div className="user-info">
-        <NavLink exact to="/profil">
+        <NavLink to="/profil">
           <img src={userData.userPicture} alt="user-img" />
         </NavLink>
       </div>

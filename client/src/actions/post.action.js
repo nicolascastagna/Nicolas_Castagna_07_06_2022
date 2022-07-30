@@ -10,13 +10,12 @@ export const UNLIKE_POST = "UNLIKE_POST";
 export const GET_LIKES = "GET_LIKES";
 
 const token = JSON.parse(localStorage.getItem("token"));
-const userId = JSON.parse(localStorage.getItem("token")).userId;
 
-export const getOnePost = (id) => {
+export const getPost = (id) => {
   return (dispatch) => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}posts/${id}`, {
-        headers: { Authorization: `Bearer ${token.token}` },
+        headers: { Authorization: "Bearer " + token.token },
       })
       .then((res) => {
         dispatch({ type: GET_POSTS, payload: res.data });
@@ -29,7 +28,7 @@ export const getAllPosts = () => {
   return (dispatch) => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}posts/`, {
-        headers: { Authorization: `Bearer ${token.token}` },
+        headers: { Authorization: "Bearer " + token.token },
       })
       .then((res) => {
         dispatch({ type: GET_ALL_POSTS, payload: res.data });
@@ -50,7 +49,7 @@ export const updatePost = (id, postText, postFile) => {
       return axios({
         method: "put",
         url: `${process.env.REACT_APP_API_URL}posts/${id}`,
-        headers: { Authorization: `Bearer ${token.token}` },
+        headers: { Authorization: "Bearer " + token.token },
       })
         .then((res) => {
           dispatch({ type: UPDATE_POST, payload: res.data });
@@ -64,7 +63,7 @@ export const deletePost = (id) => {
     return axios({
       method: "delete",
       url: `${process.env.REACT_APP_API_URL}posts/${id}`,
-      headers: { Authorization: `Bearer ${token.token}` },
+      headers: { Authorization: "Bearer " + token.token },
     })
       .then((res) => {
         dispatch({ type: DELETE_POST, payload: res.data });
@@ -81,7 +80,7 @@ export const createPost = (data) => {
       data: data,
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token.token}`,
+        Authorization: "Bearer " + token.token,
         "Content-Type": "application/json",
       },
     })
@@ -96,13 +95,13 @@ export const createPost = (data) => {
 export const likePost = (id) => {
   return (dispatch) => {
     console.log(id);
-    console.log(userId);
+    console.log(token.userId);
     return axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}like/${id}`,
-      data: { UserId: userId },
+      data: { UserId: token.userId },
       headers: {
-        Authorization: `Bearer ${token.token}`,
+        Authorization: "Bearer " + token.token,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
@@ -121,11 +120,11 @@ export const unlikePost = (id) => {
       method: "post",
       url: `${process.env.REACT_APP_API_URL}like/${id}`,
       headers: {
-        Authorization: `Bearer ${token.token}`,
+        Authorization: "Bearer " + token.token,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      data: { UserId: userId },
+      data: { UserId: token.userId },
     })
       .then((res) => {
         dispatch({ type: UNLIKE_POST, payload: res.data });
@@ -141,7 +140,7 @@ export const getLikes = () => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}like`, {
         headers: {
-          Authorization: `Bearer ${token.token}`,
+          Authorization: "Bearer " + token.token,
           "Content-Type": "application/json",
         },
       })
