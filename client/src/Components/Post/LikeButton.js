@@ -20,16 +20,17 @@ const LikeButton = ({ post }) => {
   };
 
   useEffect(() => {
+    console.log(liked);
     if (post.id === dataUser) setLiked(true);
     else setLiked(false);
-  }, [dataUser, post.id, liked]);
+  }, [dataUser, setLiked, post.id]);
 
   return (
     <div className="like-container">
       {dataUser && liked === false && (
         <img src="./img-project/heart.svg" onClick={like} alt="like" />
       )}
-      {dataUser && liked === true && (
+      {dataUser && liked && (
         <img
           src="./img-project/heart-filled.svg"
           onClick={unlike}

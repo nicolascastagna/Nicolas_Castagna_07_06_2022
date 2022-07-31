@@ -72,12 +72,12 @@ export const deletePost = (id) => {
   };
 };
 
-export const createPost = (data) => {
+export const createPost = (data, firstName, lastName) => {
   return (dispatch) => {
     return axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}posts/`,
-      data: data,
+      data,
       withCredentials: true,
       headers: {
         Authorization: "Bearer " + token.token,
@@ -99,7 +99,7 @@ export const likePost = (id) => {
     return axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}like/${id}`,
-      data: { UserId: token.userId },
+      data: { id: token.userId },
       headers: {
         Authorization: "Bearer " + token.token,
         Accept: "application/json",
@@ -124,7 +124,7 @@ export const unlikePost = (id) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      data: { UserId: token.userId },
+      data: { id: token.userId },
     })
       .then((res) => {
         dispatch({ type: UNLIKE_POST, payload: res.data });

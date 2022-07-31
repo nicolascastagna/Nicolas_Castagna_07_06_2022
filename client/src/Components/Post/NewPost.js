@@ -14,10 +14,9 @@ const NewPost = () => {
   const handlePost = async () => {
     if (message || postPicture) {
       const data = new FormData();
-      data.append("id", userData.id);
       data.append("postText", message);
+      data.append("userId", userData.id);
       if (file) data.append("file", file);
-
       await dispatch(createPost(data));
       dispatch(getPost());
       cancelPost();
@@ -68,7 +67,6 @@ const NewPost = () => {
             <div className="content">
               <p>{message}</p>
               <img src={postPicture} alt="" className="card-picture" />
-              {/* <img src={postPicture} alt="" /> */}
             </div>
           </div>
         ) : null}

@@ -16,7 +16,7 @@ const CardPost = ({ post }) => {
   const dispatch = useDispatch();
 
   const userUpdate = (user, post) => {
-    if (user.id === post.id || user.admin === 1) {
+    if (user.id === post.id || user.admin === true) {
       return true;
     } else return false;
   };
