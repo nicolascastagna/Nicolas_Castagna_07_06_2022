@@ -20,9 +20,9 @@ const UpdateProfil = () => {
 
   const handleDelete = () => {
     if (window.confirm("Voulez-vous vraiment supprimer votre profil ?")) {
-      dispatch(deleteUser(userData.userId));
+      dispatch(deleteUser(userData.id));
       localStorage.clear();
-      window.location = "/";
+      window.location.href = "/";
     }
   };
 

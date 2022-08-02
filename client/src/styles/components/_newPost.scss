@@ -37,6 +37,7 @@
         background: white;
         .content p {
             overflow: auto;
+            line-break: anywhere;
         }
     }
       textarea {
