@@ -12,6 +12,7 @@ const CardPost = ({ post }) => {
   const [isLoading, setIsLoading] = useState(true);
   const userData = useSelector((state) => state.userReducer.dataUser);
   const usersData = useSelector((state) => state.usersReducer.dataAllUsers);
+  const postsData = useSelector((state) => state.allPostsReducer.allPostsData);
   const [isUpdated, setIsUpdated] = useState(false);
   const [textUpdate, setTextUpdate] = useState(null);
   const dispatch = useDispatch();
@@ -34,8 +35,8 @@ const CardPost = ({ post }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    !isEmpty(usersData[0]) && setIsLoading(false);
-  }, [usersData]);
+    !isEmpty(postsData[0]) && setIsLoading(false);
+  }, [postsData]);
 
   return (
     <div className="main-card" key={post.id}>
@@ -46,10 +47,10 @@ const CardPost = ({ post }) => {
           <div className="card-left">
             <img
               src={
-                !isEmpty(usersData[0]) &&
-                usersData
+                !isEmpty(postsData[0]) &&
+                postsData
                   .map((user) => {
-                    if (user.id === post.id) return user.userPicture;
+                    if (user.id === post.id) return user.User.userPicture;
                     else return null;
                   })
                   .join("")
@@ -59,11 +60,11 @@ const CardPost = ({ post }) => {
             <div className="card-header">
               <div className="name-user">
                 <h3>
-                  {!isEmpty(usersData[0]) &&
-                    usersData
+                  {!isEmpty(postsData[0]) &&
+                    postsData
                       .map((user) => {
                         if (user.id === post.id)
-                          return user.firstName + " " + user.lastName;
+                          return user.User.firstName + " " + user.User.lastName;
                         else return null;
                       })
                       .join("")}

@@ -107,7 +107,6 @@ exports.getOnePost = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
   Posts.findAll({
-    raw: true,
     include: {
       model: Users,
       attributes: ["id", "firstName", "lastName", "userPicture"],
