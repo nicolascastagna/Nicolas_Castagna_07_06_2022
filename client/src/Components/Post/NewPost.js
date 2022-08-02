@@ -13,10 +13,6 @@ const NewPost = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handlePost = async () => {
-    console.log(userData);
-    console.log(handlePost);
-    console.log(postText);
-
     if (postText || postFile) {
       const data = new FormData();
       data.append("postText", postText);

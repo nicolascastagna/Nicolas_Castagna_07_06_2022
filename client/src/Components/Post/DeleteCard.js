@@ -15,6 +15,7 @@ const DeleteCard = (props) => {
       onClick={() => {
         if (window.confirm("Voulez-vous supprimer ce post ?")) {
           handleDelete();
+          window.location.reload();
         }
       }}
     >

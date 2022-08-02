@@ -98,7 +98,7 @@ const CardPost = ({ post }) => {
               />
             )}
             <div className="button-container">
-              {userData.id === post.id ? (
+              {userData.id === post.User.id ? (
                 <>
                   <div onClick={() => setIsUpdated(!isUpdated)}>
                     <img src="./img-project/edit.svg" alt="edit" />
