@@ -8,14 +8,14 @@ React, redux, Node.js, Express, MySQL, Sequelize
 
 Depuis le dossier "back" du projet, ajoutez un fichier .env suivi de vos informations :
 
-DB_USER=root
-DB_PASSWORD=MotDePasseMySQL
-DB_DATABASE=groupomania
-DB_HOST=localhost
+`DB_USER=root  
+DB_PASSWORD=MotDePasseMySQL  
+DB_DATABASE=groupomania  
+DB_HOST=localhost  
 DB_DIALECT=mysql
 
-TOKEN=RANDOM_TOKEN_SECRET
-PORT=3000
+TOKEN=RANDOM_TOKEN_SECRET  
+PORT=3000`
 
 Exécutez npm install. Vous pouvez alors exécuter le serveur avec npm start. Le serveur doit fonctionner sur localhost avec le port par défaut 3000. Redémarrez l'ordinateur si le serveur ne se lance pas sur le port 3000.
 
