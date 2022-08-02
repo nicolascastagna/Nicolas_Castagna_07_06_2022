@@ -5,6 +5,7 @@ const MIME_TYPES = {
   "image/jpg": "jpg",
   "image/jpeg": "jpg",
   "image/png": "png",
+  "image/gif": "gif",
 };
 
 // diskStorage() configure le chemin et le nom de fichier pour les fichiers entrants
@@ -20,4 +21,4 @@ const storage = multer.diskStorage({
 });
 
 // single() capture les fichiers et les enregistre
-module.exports = multer({ storage }).single("image");
+module.exports = multer({ storage }).single("file");

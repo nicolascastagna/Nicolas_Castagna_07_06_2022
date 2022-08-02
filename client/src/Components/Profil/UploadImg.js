@@ -5,15 +5,14 @@ import { uploadPicture } from "../../actions/user.action";
 const UploadImg = () => {
   const [file, setFile] = useState();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userReducer);
+  const userData = useSelector((state) => state.userReducer.dataUser);
 
   const handlePicture = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("userId", userData.userId);
-    data.append("images", file);
-
-    dispatch(uploadPicture(data, userData.userPicture));
+    data.append("file", file);
+    dispatch(uploadPicture(data, userData.id));
+    window.location.reload();
   };
 
   return (

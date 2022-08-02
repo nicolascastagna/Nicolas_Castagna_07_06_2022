@@ -21,22 +21,23 @@ export const getUser = () => {
   };
 };
 
-export const uploadPicture = (picture, id) => {
-  const data = new FormData();
-  data.append("userId", token.userId);
-  if (typeof images === "object") {
-    data.append("images", picture);
-  }
+export const uploadPicture = (data, id) => {
+  // const data = new FormData();
+  // data.append("userId", token.userId);
+  // if (typeof images === "object") {
+  //   data.append("images", picture);
+  // }
   return (dispatch) => {
+    console.log(data);
+    console.log({ id });
     return axios
-      .put(`${process.env.REACT_APP_API_URL}posts/${id}`, {
+      .put(`${process.env.REACT_APP_API_URL}profil/${id}`, data, {
         headers: { Authorization: "Bearer " + token.token },
         "Content-Type": "application/json",
         withCredentials: true,
-        data: { ...data },
       })
       .then((res) => {
-        dispatch({ type: UPLOAD_PICTURE, payload: res.data.userPicture });
+        dispatch({ type: UPLOAD_PICTURE, payload: { id } });
       })
       .catch((err) => console.log(err));
   };
