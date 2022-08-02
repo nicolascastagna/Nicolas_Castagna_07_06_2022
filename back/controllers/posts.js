@@ -106,7 +106,14 @@ exports.getOnePost = async (req, res, next) => {
 };
 
 exports.getAllPosts = async (req, res, next) => {
-  Posts.findAll()
+  Posts.findAll({
+    raw: true,
+    include: {
+      model: Users,
+      attributes: ["id", "firstName", "lastName", "userPicture"],
+    },
+    order: [["createdAt", "DESC"]],
+  })
     .then((posts) => res.status(200).json(posts))
     .catch((error) => res.status(400).json({ error }));
 };

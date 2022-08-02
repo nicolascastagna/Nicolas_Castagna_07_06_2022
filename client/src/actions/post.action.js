@@ -24,14 +24,16 @@ export const getPostId = (id) => {
   };
 };
 
-export const getAllPosts = () => {
+export const getAllPosts = (num) => {
   return (dispatch) => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}posts/`, {
         headers: { Authorization: "Bearer " + token.token },
       })
       .then((res) => {
+        const array = res.data.slice(0, num);
         dispatch({ type: GET_ALL_POSTS, payload: res.data });
+        return array;
       })
       .catch((err) => console.log(err));
   };

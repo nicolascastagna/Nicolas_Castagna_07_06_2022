@@ -1,3 +1,5 @@
+const Posts = require("./Posts");
+
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define("Users", {
     id: {
@@ -40,7 +42,6 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasMany(models.Likes, {
       onDelete: "cascade",
     });
-
     Users.hasMany(models.Posts, {
       onDelete: "cascade",
     });

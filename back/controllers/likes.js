@@ -1,4 +1,4 @@
-const { Posts, Likes, Users } = require("../models");
+const { Likes, Users } = require("../models");
 
 exports.postLike = (req, res, next) => {
   try {
@@ -24,7 +24,9 @@ exports.postLike = (req, res, next) => {
 };
 
 exports.getAllLikes = async (req, res, next) => {
-  Likes.findAll({ includes: [Users] })
+  Likes.findAll({
+    includes: { model: Users, attributes: ["id"] },
+  })
     .then((likes) => res.status(200).json(likes))
     .catch((error) => res.status(400).json({ error }));
 };
