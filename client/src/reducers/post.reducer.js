@@ -34,30 +34,36 @@ export default function postReducer(state = initialState, action) {
         ...state,
         postData: action.payload,
       };
-    case DELETE_POST:
-      return state.filter((post) => post.id !== action.payload.PostId);
-    // case LIKE_POST:
-    //   let postDataLikes = [...state.postData];
-    //   return postDataLikes.map((post) => {
+    case DELETE_POST: {
+      let arrayData = [...state.postData].filter((post) => {
+        return post.id !== action.payload.id;
+      });
+      return {
+        ...state,
+        postData: arrayData,
+      };
+    }
+    // case LIKE_POST: {
+    //   let arrayData = [...state.postData];
+    //   return arrayData.map((post) => {
+    //     if (post.id === action.payload.id) {
+    //       return {
+    //         ...post,
+    //         postData: arrayData,
+    //       };
+    //     }
+    //   });
+    // }
+    // case UNLIKE_POST: {
+    //   let arrayData = [...state.postData].filter((post) => {
     //     if (post.id === action.payload.id) {
     //       return {
     //         ...state,
-    //         postData: postDataLikes,
+    //         postData: arrayData,
     //       };
     //     }
-    //     return post;
     //   });
-    // case UNLIKE_POST:
-    //   let postDataUnlike = [...state.postData];
-    //   return postDataUnlike.map((post) => {
-    //     if (post.id === action.payload.id) {
-    //       return {
-    //         ...state,
-    //         postData: postDataLikes,
-    //       };
-    //     }
-    //     return post;
-    //   });
+    // }
     case GET_LIKES:
       // Récupère la liste des likes de la publication.
       return state.map((post) => {

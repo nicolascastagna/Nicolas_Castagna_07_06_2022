@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../../actions/post.action";
+import { getUser } from "../../actions/user.action";
 import { getUsers } from "../../actions/users.action";
 import { isEmpty } from "../../Utils";
 import { dateParser } from "../Utils";
@@ -15,14 +16,15 @@ const CardPost = ({ post }) => {
   const [textUpdate, setTextUpdate] = useState(null);
   const dispatch = useDispatch();
 
-  const userUpdate = (user, post) => {
-    if (user.id === post.id || user.admin === true) {
-      return true;
-    } else return false;
-  };
+  // const userUpdate = (user, post) => {
+  //   if (user.id === post.id || user.admin === true) {
+  //     return true;
+  //   } else return false;
+  // };
   const updateItem = () => {
     if (textUpdate) {
       dispatch(updatePost(post.id, textUpdate));
+      window.location.reload();
     }
     setIsUpdated(false);
   };
@@ -95,13 +97,22 @@ const CardPost = ({ post }) => {
               />
             )}
             <div className="button-container">
-              {userUpdate(userData, post) && (
+              {userData.id === post.id ? (
                 <>
                   <div onClick={() => setIsUpdated(!isUpdated)}>
                     <img src="./img-project/edit.svg" alt="edit" />
                   </div>
                   <DeleteCard id={post.id} />
                 </>
+              ) : (
+                userData.admin && (
+                  <>
+                    <div onClick={() => setIsUpdated(!isUpdated)}>
+                      <img src="./img-project/edit.svg" alt="edit" />
+                    </div>
+                    <DeleteCard id={post.id} />
+                  </>
+                )
               )}
               <LikeButton post={post} />
             </div>

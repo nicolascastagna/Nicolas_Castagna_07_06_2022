@@ -11,7 +11,7 @@ export const GET_LIKES = "GET_LIKES";
 
 const token = JSON.parse(localStorage.getItem("token"));
 
-export const getPost = (id) => {
+export const getPostId = (id) => {
   return (dispatch) => {
     return axios
       .get(`${process.env.REACT_APP_API_URL}posts/${id}`, {
@@ -44,12 +44,14 @@ export const updatePost = (id, postText, postFile) => {
     if (typeof images === "object") {
       data.append("images", postFile);
     }
-
     if (postText || postFile) {
       return axios({
         method: "put",
         url: `${process.env.REACT_APP_API_URL}posts/${id}`,
+        data: { postText: postText, postFile: postFile },
         headers: { Authorization: "Bearer " + token.token },
+        Accept: "application/json",
+        "Content-Type": "application/json",
       })
         .then((res) => {
           dispatch({ type: UPDATE_POST, payload: res.data });
@@ -66,32 +68,29 @@ export const deletePost = (id) => {
       headers: { Authorization: "Bearer " + token.token },
     })
       .then((res) => {
-        dispatch({ type: DELETE_POST, payload: res.data });
+        dispatch({ type: DELETE_POST, payload: { id } });
       })
       .catch((err) => console.log(err));
   };
 };
 
-export const createPost = (data, firstName, lastName) => {
+export const createPost = (data) => {
   return (dispatch) => {
-    return axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}posts/`,
-      data,
-      withCredentials: true,
-      headers: {
-        Authorization: "Bearer " + token.token,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        dispatch({ type: CREATE_POST, payload: res.data });
+    return axios
+      .post(`${process.env.REACT_APP_API_URL}posts/`, data, {
+        headers: {
+          Authorization: "Bearer " + token.token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => {
+        dispatch({ type: CREATE_POST, payload: data });
+      })
+      .catch((err) => console.log(err));
   };
 };
+
 export const likePost = (id) => {
   return (dispatch) => {
     console.log(id);

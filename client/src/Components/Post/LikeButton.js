@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { likePost, unlikePost } from "../../actions/post.action";
+import { getLikes, likePost, unlikePost } from "../../actions/post.action";
 import { dataContext } from "../AppContext";
 
 const LikeButton = ({ post }) => {
   const [liked, setLiked] = useState(false);
   const dataUser = useContext(dataContext);
-  const userData = useSelector((state) => state.userReducer.dataUser);
   const dispatch = useDispatch();
 
   const like = () => {
@@ -20,7 +19,6 @@ const LikeButton = ({ post }) => {
   };
 
   useEffect(() => {
-    console.log(liked);
     if (post.id === dataUser) setLiked(true);
     else setLiked(false);
   }, [dataUser, setLiked, post.id]);
