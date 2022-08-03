@@ -22,7 +22,7 @@ const NewPost = () => {
       await dispatch(createPost(data));
       dispatch(getPostId());
       cancelPost();
-      window.location.reload();
+      // window.location.reload();
     } else {
       alert("Veuillez entrer un message");
     }

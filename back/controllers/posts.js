@@ -1,18 +1,34 @@
 const { Posts, Users } = require("../models");
 const fs = require("fs");
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   const postObject = req.body;
 
-  const post = new Posts({
+  try {
+    if (req.file) {
+      postFile = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    } else {
+      postFile = null;
+    }
+  } catch (err) {
+    return res.status(201).json({ errors });
+  }
+
+  const newPost = new Posts({
     ...postObject,
     UserId: req.auth.userId,
-    postFile: `${req.protocol}://${req.get("host")}/images/${req.file}`,
+    postFile: postFile,
   });
-  post
-    .save()
-    .then(() => res.status(201).json({ message: "Post créé !" }))
-    .catch((error) => res.status(400).json({ error }));
+
+  try {
+    const post = await newPost
+      .save()
+      .then(() => res.status(201).json({ post }));
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 exports.modifyPost = (req, res, next) => {
@@ -76,14 +92,24 @@ exports.deletePost = (req, res, next) => {
       Posts.findOne({ where: { id: req.params.id } })
         .then((post) => {
           if (post.UserId == req.auth.userId || admin) {
-            const filename = post.postFile.split("/images/")[1];
-            fs.unlink(`images/${filename}`, () => {
-              Posts.destroy({ where: { id: req.params.id } })
-                .then(() =>
-                  res.status(200).json({ message: "Post supprimé !" })
-                )
-                .catch((error) => res.status(400).json({ error }));
-            });
+            if (post.postFile) {
+              const filename = post.postFile.split("/images/")[1];
+              fs.unlink(`images/${filename}`, () => {
+                Posts.destroy({ where: { id: req.params.id } })
+                  .then(() =>
+                    res
+                      .status(200)
+                      .json({ message: "Post supprimé son image !" })
+                  )
+                  .catch((error) => res.status(400).json({ error }));
+              });
+            } else {
+              Posts.destroy(
+                { where: { id: req.params.id } },
+                { truncate: true }
+              );
+              res.status(200).json({ message: "Publication supprimée." });
+            }
           } else {
             return res.status(401).json({
               error: new error("Requête non autorisée !"),
