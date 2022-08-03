@@ -16,13 +16,13 @@ const NewPost = () => {
     if (postText || postFile) {
       const data = new FormData();
       data.append("postText", postText);
-      data.append("userId", userData.id);
+      data.append("UserId", userData.id);
       if (file) data.append("file", file);
 
       await dispatch(createPost(data));
       dispatch(getPostId());
       cancelPost();
-      // window.location.reload();
+      window.location.reload();
     } else {
       alert("Veuillez entrer un message");
     }

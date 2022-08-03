@@ -1,7 +1,7 @@
 const { Posts, Users } = require("../models");
 const fs = require("fs");
 
-exports.createPost = async (req, res, next) => {
+exports.createPost = (req, res, next) => {
   const postObject = req.body;
 
   try {
@@ -21,14 +21,10 @@ exports.createPost = async (req, res, next) => {
     UserId: req.auth.userId,
     postFile: postFile,
   });
-
-  try {
-    const post = await newPost
-      .save()
-      .then(() => res.status(201).json({ post }));
-  } catch (error) {
-    res.status(400).json({ error });
-  }
+  newPost
+    .save()
+    .then((data) => res.status(201).json({ data }))
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.modifyPost = (req, res, next) => {
