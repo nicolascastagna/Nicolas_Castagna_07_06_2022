@@ -45,9 +45,14 @@ const Signup = () => {
           setFormSubmit(true);
         })
         .catch((err) => {
-          console.log(err.response.data.error.errors);
-          emailError.innerHTML =
-            err.response.data.error.errors[0].value + " est déjà utilisé !";
+          console.log(err.response);
+          if (err.response.data.error) {
+            emailError.innerHTML = err.response.data.error;
+          }
+          if (err.response.data.error.errors[0].value) {
+            emailError.innerHTML =
+              err.response.data.error.errors[0].value + " est déjà utilisé !";
+          }
         });
     }
   };
