@@ -1,5 +1,6 @@
 const { Posts, Users } = require("../models");
 const fs = require("fs");
+const Likes = require("../models/Likes");
 
 exports.createPost = (req, res, next) => {
   const postObject = req.body;
@@ -123,8 +124,8 @@ exports.getOnePost = async (req, res, next) => {
   Posts.findOne({
     where: { id: req.params.id },
   })
-    .then((profil) => res.status(200).json(profil))
-    .catch((error) => res.status(404).json({ error }));
+    .then((post) => res.status(200).json(post))
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getAllPosts = async (req, res, next) => {

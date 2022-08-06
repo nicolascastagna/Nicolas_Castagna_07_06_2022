@@ -22,14 +22,7 @@ export const getUser = () => {
 };
 
 export const uploadPicture = (data, id) => {
-  // const data = new FormData();
-  // data.append("userId", token.userId);
-  // if (typeof images === "object") {
-  //   data.append("images", picture);
-  // }
   return (dispatch) => {
-    console.log(data);
-    console.log({ id });
     return axios
       .put(`${process.env.REACT_APP_API_URL}profil/${id}`, data, {
         headers: { Authorization: "Bearer " + token.token },
@@ -43,21 +36,21 @@ export const uploadPicture = (data, id) => {
   };
 };
 
-export const updateUser = (id, firstName, lastName, email) => {
+export const updateUser = (id, firstName, lastName) => {
   return (dispatch) => {
     const data = new FormData();
     data.append("firstName", firstName);
     data.append("lastName", lastName);
-    data.append("email", email);
-    return axios({
-      method: "PUT",
-      url: `${process.env.REACT_APP_API_URL}profil/${id}`,
-      headers: { Authorization: "Bearer " + token.token },
-      "Content-Type": "application/json",
-      withCredentials: true,
-      data: { ...data },
-    })
-      .then((res) => dispatch({ type: UPDATE_USER, payload: data }))
+    data.append("UserId", token.userId);
+    return axios
+      .put(`${process.env.REACT_APP_API_URL}profil/${id}`, data, {
+        headers: { Authorization: "Bearer " + token.token },
+        "Content-Type": "application/json",
+        withCredentials: true,
+      })
+      .then((res) =>
+        dispatch({ type: UPDATE_USER, payload: { firstName, lastName } })
+      )
       .catch((err) => console.log(err));
   };
 };

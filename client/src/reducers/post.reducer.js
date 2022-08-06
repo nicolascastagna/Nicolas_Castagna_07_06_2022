@@ -64,14 +64,20 @@ export default function postReducer(state = initialState, action) {
     //     }
     //   });
     // }
-    case GET_LIKES:
-      // Récupère la liste des likes de la publication.
-      return state.map((post) => {
-        action.payload.forEach((like) => {
-          return like;
-        });
-        return post;
+    case GET_LIKES: {
+      let arrayData = [...state.postData].map((like) => {
+        if (like.id === action.payload.Post.id) {
+          return {
+            ...like,
+            likes: [...action.payload.likes],
+          };
+        }
+        return {
+          ...state,
+          postData: arrayData,
+        };
       });
+    }
     default:
       return state;
   }

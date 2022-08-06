@@ -32,8 +32,6 @@ exports.modifyProfil = (req, res, next) => {
   Users.findOne({ where: { id: req.params.id } }).then((user) => {
     const filename = user.userPicture.split("/images/")[1];
     if (user.id !== req.auth.userId) {
-      console.log(user.User.id);
-      console.log(userPicture);
       return res.status(401).json({
         error: "Requête non autorisée !",
       });
@@ -52,6 +50,7 @@ exports.modifyProfil = (req, res, next) => {
       fs.unlink(`images/${filename}`, () => {
         console.log("Photo de profil supprimé !");
       });
+
       Users.update(
         { ...userProfil, id: req.params.id },
         { where: { id: req.params.id } }

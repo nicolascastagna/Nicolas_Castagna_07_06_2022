@@ -7,15 +7,35 @@ const UpdateProfil = () => {
   const userData = useSelector((state) => state.userReducer.dataUser);
   const dispatch = useDispatch();
 
-  const emailError = document.querySelector(".email-profil.error");
   const [updateForm, setUpdateForm] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState([]);
+  const [lastName, setLastName] = useState([]);
+  const error = document.querySelector(".error");
+  const regex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,}$/;
 
-  const handleUpdate = () => {
-    dispatch(updateUser(userData.userId, email, firstName, lastName));
-    setUpdateForm(false);
+  const handleUpdate = (e) => {
+    error.innerHTML = "";
+    if (firstName.length > 2 && lastName.length > 2) {
+      dispatch(updateUser(userData.id, firstName, lastName));
+      setUpdateForm(false);
+    } else {
+      e.preventDefault();
+      error.innerHTML = "Veuillez renseigner un minimum de 3 caractères";
+    }
+    // error.innerHTML = "";
+    // if (firstName.length < 2 && lastName.length < 2) {
+    //   e.preventDefault();
+    //   error.innerHTML = "Veuillez renseigner un minimum de 3 caractères";
+    //   return false;
+    // } else if (!regex) {
+    //   error.innerHTML =
+    //     "Merci de ne pas écrire de caractères spéciaux ni de chiffres";
+    //   return false;
+    // } else {
+    //   dispatch(updateUser(userData.id, firstName, lastName));
+    //   setUpdateForm(false);
+    //   return true;
+    // }
   };
 
   const handleDelete = () => {
@@ -52,6 +72,8 @@ const UpdateProfil = () => {
               type="text"
               name="firstName"
               id="firstName"
+              value={firstName}
+              required
               placeholder="Ecrivez votre nouveau prénom..."
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -62,26 +84,20 @@ const UpdateProfil = () => {
               type="text"
               name="lastName"
               id="lastName"
+              value={lastName}
+              required
               placeholder="Ecrivez votre nouveau nom..."
               onChange={(e) => setLastName(e.target.value)}
             />
             <div className="lastName-profil error"></div>
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              type="text"
-              name="email"
-              id="email"
-              placeholder="Ecrivez votre nouvelle adresse mail..."
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <div className="email-profil error"></div>
-            <input
-              type="button"
-              id="confirm-input"
-              value="Valider les modifications"
-              onClick={handleUpdate}
-            />
+            {updateForm === false && (
+              <input
+                type="submit"
+                id="confirm-input"
+                value="Valider les modifications"
+                onClick={handleUpdate}
+              />
+            )}
           </form>
         </div>
       )}

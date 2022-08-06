@@ -1,4 +1,4 @@
-const { Likes, Users } = require("../models");
+const { Likes, Users, Posts } = require("../models");
 
 exports.postLike = (req, res, next) => {
   try {
@@ -10,12 +10,12 @@ exports.postLike = (req, res, next) => {
     }).then((like) => {
       if (!like) {
         Likes.create({ PostId: PostId, UserId: UserId });
-        res.json({ liked: true });
+        res.json({ liked: true, PostId, UserId });
       } else {
         Likes.destroy({
           where: { PostId: PostId, UserId: UserId },
         });
-        res.json({ liked: false });
+        res.json({ liked: false, PostId, UserId });
       }
     });
   } catch {
@@ -24,9 +24,27 @@ exports.postLike = (req, res, next) => {
 };
 
 exports.getAllLikes = async (req, res, next) => {
-  Likes.findAll({
-    includes: { model: Users, attributes: ["id"] },
-  })
-    .then((likes) => res.status(200).json(likes))
-    .catch((error) => res.status(400).json({ error }));
+  try {
+    const likes = Likes.findAll({
+      raw: true,
+      include: [
+        {
+          model: Posts,
+          attributes: ["id"],
+          include: [
+            {
+              model: Users,
+              attributes: ["id"],
+            },
+          ],
+        },
+      ],
+    }).then((likes) => {
+      res.status(200).json({
+        Likes: likes,
+      });
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message });
+  }
 };

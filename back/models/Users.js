@@ -1,5 +1,3 @@
-const Posts = require("./Posts");
-
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define("Users", {
     id: {

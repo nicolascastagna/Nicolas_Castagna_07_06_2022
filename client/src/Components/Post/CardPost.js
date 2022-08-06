@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePost } from "../../actions/post.action";
+import { getLikes, updatePost } from "../../actions/post.action";
 import { getUser } from "../../actions/user.action";
 import { getUsers } from "../../actions/users.action";
 import { isEmpty } from "../../Utils";
@@ -33,6 +33,10 @@ const CardPost = ({ post }) => {
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getLikes(post.id));
+  }, [dispatch, post.id]);
 
   useEffect(() => {
     !isEmpty(postsData[0]) && setIsLoading(false);
