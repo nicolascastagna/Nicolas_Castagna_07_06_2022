@@ -25,8 +25,7 @@ exports.postLike = (req, res, next) => {
 
 exports.getAllLikes = async (req, res, next) => {
   try {
-    const likes = Likes.findAll({
-      raw: true,
+    Likes.findAll({
       include: [
         {
           model: Posts,

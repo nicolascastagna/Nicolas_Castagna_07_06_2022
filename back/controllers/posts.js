@@ -1,6 +1,5 @@
-const { Posts, Users } = require("../models");
+const { Posts, Users, Likes } = require("../models");
 const fs = require("fs");
-const Likes = require("../models/Likes");
 
 exports.createPost = (req, res, next) => {
   const postObject = req.body;
@@ -130,12 +129,17 @@ exports.getOnePost = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
   Posts.findAll({
-    include: {
-      model: Users,
-      attributes: ["id", "firstName", "lastName", "userPicture"],
-    },
     order: [["createdAt", "DESC"]],
+    include: [
+      {
+        model: Users,
+        attributes: ["id", "firstName", "lastName", "userPicture"],
+      },
+      {
+        model: Likes,
+      },
+    ],
   })
     .then((posts) => res.status(200).json(posts))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => res.status(400).json({ error: error.message }));
 };

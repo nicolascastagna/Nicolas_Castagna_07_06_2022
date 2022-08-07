@@ -13,6 +13,7 @@ const CardPost = ({ post }) => {
   const userData = useSelector((state) => state.userReducer.dataUser);
   const usersData = useSelector((state) => state.usersReducer.dataAllUsers);
   const postsData = useSelector((state) => state.allPostsReducer.allPostsData);
+  const allLikes = useSelector((state) => state.postReducer.postData);
   const [isUpdated, setIsUpdated] = useState(false);
   const [textUpdate, setTextUpdate] = useState(null);
   const dispatch = useDispatch();

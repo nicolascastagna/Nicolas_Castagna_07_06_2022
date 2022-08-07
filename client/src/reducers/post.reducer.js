@@ -45,18 +45,18 @@ export default function postReducer(state = initialState, action) {
     }
     // case LIKE_POST: {
     //   let arrayData = [...state.postData];
-    //   return arrayData.map((post) => {
-    //     if (post.id === action.payload.id) {
+    //   return arrayData.map((like) => {
+    //     if (like.id === action.payload.PostId) {
     //       return {
-    //         ...post,
+    //         ...like,
     //         postData: arrayData,
     //       };
     //     }
     //   });
     // }
     // case UNLIKE_POST: {
-    //   let arrayData = [...state.postData].filter((post) => {
-    //     if (post.id === action.payload.id) {
+    //   let arrayData = [...state.postData].filter((like) => {
+    //     if (like.id === action.payload.PostId) {
     //       return {
     //         ...state,
     //         postData: arrayData,
@@ -64,20 +64,23 @@ export default function postReducer(state = initialState, action) {
     //     }
     //   });
     // }
-    case GET_LIKES: {
-      let arrayData = [...state.postData].map((like) => {
-        if (like.id === action.payload.Post.id) {
-          return {
-            ...like,
-            likes: [...action.payload.likes],
-          };
-        }
-        return {
-          ...state,
-          postData: arrayData,
-        };
-      });
-    }
+    case GET_LIKES:
+      return {
+        ...state,
+        postData: action.payload,
+      };
+    // {
+    //   let arrayData = [...state.postData];
+    //   return arrayData.map((post) => {
+    //     if (post.id === action.payload.id) {
+    //       return {
+    //         ...post,
+    //         Likes: [...action.payload.Likes],
+    //       };
+    //     }
+    //     return post;
+    //   });
+    // }
     default:
       return state;
   }
