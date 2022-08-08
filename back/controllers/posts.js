@@ -137,6 +137,7 @@ exports.getAllPosts = async (req, res, next) => {
       },
       {
         model: Likes,
+        attributes: ["id", "UserId", "PostId"],
       },
     ],
   })

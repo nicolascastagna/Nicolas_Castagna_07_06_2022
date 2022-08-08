@@ -43,44 +43,39 @@ export default function postReducer(state = initialState, action) {
         postData: arrayData,
       };
     }
-    // case LIKE_POST: {
-    //   let arrayData = [...state.postData];
-    //   return arrayData.map((like) => {
-    //     if (like.id === action.payload.PostId) {
-    //       return {
-    //         ...like,
-    //         postData: arrayData,
-    //       };
-    //     }
-    //   });
-    // }
-    // case UNLIKE_POST: {
-    //   let arrayData = [...state.postData].filter((like) => {
-    //     if (like.id === action.payload.PostId) {
-    //       return {
-    //         ...state,
-    //         postData: arrayData,
-    //       };
-    //     }
-    //   });
-    // }
-    case GET_LIKES:
-      return {
-        ...state,
-        postData: action.payload,
-      };
-    // {
-    //   let arrayData = [...state.postData];
-    //   return arrayData.map((post) => {
-    //     if (post.id === action.payload.id) {
-    //       return {
-    //         ...post,
-    //         Likes: [...action.payload.Likes],
-    //       };
-    //     }
-    //     return post;
-    //   });
-    // }
+    case LIKE_POST: {
+      let arrayData = [...state.postData];
+      return arrayData.map((post) => {
+        if (post.id === action.payload.UserId) {
+          return {
+            ...post,
+            postData: arrayData,
+          };
+        }
+      });
+    }
+    case UNLIKE_POST: {
+      let arrayData = [...state.postData].filter((post) => {
+        if (post.id === action.payload.id) {
+          return {
+            ...post,
+            postData: arrayData,
+          };
+        }
+        return post;
+      });
+    }
+    case GET_LIKES: {
+      let arrayData = [...state.postData];
+      return arrayData.map((post) => {
+        if (post.id === action.payload.id) {
+          return {
+            ...post,
+            Likes: action.payload.Likes,
+          };
+        } else return post;
+      });
+    }
     default:
       return state;
   }

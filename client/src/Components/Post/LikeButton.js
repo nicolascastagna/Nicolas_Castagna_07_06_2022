@@ -1,39 +1,42 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLikes, likePost, unlikePost } from "../../actions/post.action";
-import { dataContext } from "../AppContext";
 import { isEmpty } from "../../Utils";
 
 const LikeButton = ({ post }) => {
-  const [liked, setLiked] = useState(false);
-  const dataUser = useContext(dataContext);
-  const allLikes = useSelector((state) => state.postReducer.postData);
+  const [liked, setLiked] = useState(true);
   const userData = useSelector((state) => state.userReducer.dataUser);
   const postsData = useSelector((state) => state.allPostsReducer.allPostsData);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getLikes(post.id));
-  }, [dispatch, post.id]);
-
-  const like = () => {
-    dispatch(likePost(post.id, userData.id));
-    setLiked(true);
-  };
-
-  const unlike = () => {
-    dispatch(unlikePost(post.id, userData.id));
-    setLiked(false);
-  };
-
-  useEffect(() => {
-    if (post.id === userData.id) setLiked(true);
-    else setLiked(false);
-  }, [userData.id, setLiked, post.id]);
+  const token = JSON.parse(localStorage.getItem("token"));
 
   // useEffect(() => {
-  //   !isEmpty(allLikes[0]) && setLiked(false);
-  // }, [allLikes]);
+  //   dispatch(getLikes(post.id));
+  // }, [dispatch, post.id]);
+
+  const like = (e) => {
+    dispatch(likePost(post.id, userData.id));
+
+    window.location.reload();
+    alert("Vous avez liké le post !");
+  };
+  const unlike = () => {
+    dispatch(unlikePost(post.id, userData.id));
+    window.location.reload();
+    alert("Vous avez disliké le post !");
+  };
+
+  useEffect(() => {
+    if (post.id && userData.id) {
+      setLiked(false);
+    } else setLiked(true);
+  }, [userData.id, liked, post.Likes]);
+
+  // useEffect(() => {
+  //   if (post.id && userData.id && post.Likes.length === 1) {
+  //     setLiked(true);
+  //   } else setLiked(false);
+  // }, [liked, userData.id, post.Likes]);
 
   return (
     <div className="like-container">
@@ -47,14 +50,7 @@ const LikeButton = ({ post }) => {
           alt="unlike"
         />
       )}
-      {/* {!isEmpty(postsData[0]) &&
-        postsData
-          .map((post) => {
-            console.log(post.Likes);
-            if (post.Likes.UserId === post.Likes.PostId) return setLiked(true);
-            else return null;
-          })
-          .join("")} */}
+      <span>{post.Likes.length}</span>
     </div>
   );
 };
