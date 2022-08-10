@@ -5,18 +5,34 @@ exports.postLike = (req, res, next) => {
     const PostId = req.params.id;
     const UserId = req.auth.userId;
 
-    Likes.findOne({
-      where: { PostId: PostId, UserId: UserId },
-    }).then((like) => {
-      if (!like) {
-        Likes.create({ PostId: PostId, UserId: UserId });
-        res.json({ liked: true, PostId, UserId });
-      } else {
-        Likes.destroy({
-          where: { PostId: PostId, UserId: UserId },
-        });
-        res.json({ liked: false, PostId, UserId });
-      }
+    Posts.findOne({
+      where: { id: req.params.id },
+    }).then((post) => {
+      Likes.findOne({
+        where: { PostId: PostId, UserId: UserId },
+      }).then((like) => {
+        if (!like) {
+          Likes.create({ PostId: PostId, UserId: UserId })
+            .then((like) => {
+              post.update({ likes: post.likes + 1, PostId }).then((post) => {
+                res.status(201).json({ message: "Vous avez aimé le post !" });
+              });
+            })
+            .catch((error) => res.status(400).json({ error: error.message }));
+        } else if (like) {
+          Likes.destroy({
+            where: { PostId: PostId, UserId: UserId },
+          })
+            .then((like) => {
+              post.update({ likes: post.likes - 1, PostId }).then((post) => {
+                res
+                  .status(201)
+                  .json({ message: "Vous n'aimez plus le post !" });
+              });
+            })
+            .catch((error) => res.status(400).json({ error: error.message }));
+        }
+      });
     });
   } catch {
     (error) => res.status(500).json(error);

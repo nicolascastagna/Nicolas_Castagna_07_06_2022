@@ -1,5 +1,3 @@
-const Users = require("./Users");
-
 module.exports = (sequelize, DataTypes) => {
   const Posts = sequelize.define("Posts", {
     id: {
@@ -21,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
+    likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   });
   Posts.associate = (models) => {
     Posts.hasMany(models.Comments, {
@@ -28,8 +30,13 @@ module.exports = (sequelize, DataTypes) => {
     });
     Posts.hasMany(models.Likes, {
       onDelete: "cascade",
+      foreignKey: { allowNull: false },
+      hooks: true,
     });
-    Posts.belongsTo(models.Users, { onDelete: "cascade" });
+    Posts.belongsTo(models.Users, {
+      foreignKey: { allowNull: false },
+      onDelete: "cascade",
+    });
   };
   return Posts;
 };

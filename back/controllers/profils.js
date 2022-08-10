@@ -1,5 +1,6 @@
 const { Users } = require("../models");
 const fs = require("fs");
+const Posts = require("../models/Posts");
 require("dotenv").config();
 
 exports.getProfil = (req, res, next) => {
@@ -62,7 +63,9 @@ exports.modifyProfil = (req, res, next) => {
 };
 
 exports.deleteProfil = (req, res, next) => {
-  Users.findOne({ where: { id: req.params.id } })
+  Users.findOne({
+    where: { id: req.params.id },
+  })
     .then((user) => {
       if (!user) {
         return res.status(404).json({
@@ -75,12 +78,16 @@ exports.deleteProfil = (req, res, next) => {
           error: new error("Requête non autorisée !"),
         });
       }
+
       // Suppression de l'image dans le dossier images
       const filename = user.userPicture.split("/images/")[1];
       fs.unlink(`images/${filename}`, () => {
         console.log("Photo de profil supprimé !");
       });
-      Users.destroy({ where: { id: req.params.id } })
+
+      Users.destroy({
+        where: { id: req.params.id },
+      })
         .then(() => res.status(200).json({ message: "Utlisateur supprimé !" }))
         .catch((error) => res.status(400).json({ error }));
     })

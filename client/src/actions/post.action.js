@@ -5,9 +5,6 @@ export const GET_ALL_POSTS = "GET_ALL_POSTS";
 export const UPDATE_POST = "UPDATE_POST";
 export const DELETE_POST = "DELETE_POST";
 export const CREATE_POST = "CREATE_POST";
-export const LIKE_POST = "LIKE_POST";
-export const UNLIKE_POST = "UNLIKE_POST";
-export const GET_LIKES = "GET_LIKES";
 
 const token = JSON.parse(localStorage.getItem("token"));
 
@@ -90,67 +87,5 @@ export const createPost = (data) => {
         dispatch({ type: CREATE_POST, payload: res.data });
       })
       .catch((err) => console.log(err));
-  };
-};
-
-export const likePost = (id) => {
-  return (dispatch) => {
-    console.log(id);
-    console.log(token.userId);
-    return axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}like/${id}`,
-      data: { id: token.userId },
-      headers: {
-        Authorization: "Bearer " + token.token,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        dispatch({ type: LIKE_POST, payload: res.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
-export const unlikePost = (id) => {
-  return (dispatch) => {
-    return axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}like/${id}`,
-      headers: {
-        Authorization: "Bearer " + token.token,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      data: { id: token.userId },
-    })
-      .then((res) => {
-        dispatch({ type: UNLIKE_POST, payload: res.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
-
-export const getLikes = () => {
-  return (dispatch) => {
-    return axios
-      .get(`${process.env.REACT_APP_API_URL}like`, {
-        headers: {
-          Authorization: "Bearer " + token.token,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        dispatch({
-          type: GET_LIKES,
-          payload: res.data,
-        });
-      })
-      .catch((err) => err);
   };
 };

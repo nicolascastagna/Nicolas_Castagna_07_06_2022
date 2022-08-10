@@ -15,27 +15,16 @@ const UpdateProfil = () => {
 
   const handleUpdate = (e) => {
     error.innerHTML = "";
-    if (firstName.length > 2 && lastName.length > 2) {
+    if (firstName.length > 1 && lastName.length > 1) {
       dispatch(updateUser(userData.id, firstName, lastName));
-      setUpdateForm(false);
+      setUpdateForm(true);
+      setTimeout(() => {
+        window.location.href = "/home";
+      }, 2500);
     } else {
       e.preventDefault();
-      error.innerHTML = "Veuillez renseigner un minimum de 3 caractères";
+      error.innerHTML = "Veuillez renseigner un minimum de 2 caractères";
     }
-    // error.innerHTML = "";
-    // if (firstName.length < 2 && lastName.length < 2) {
-    //   e.preventDefault();
-    //   error.innerHTML = "Veuillez renseigner un minimum de 3 caractères";
-    //   return false;
-    // } else if (!regex) {
-    //   error.innerHTML =
-    //     "Merci de ne pas écrire de caractères spéciaux ni de chiffres";
-    //   return false;
-    // } else {
-    //   dispatch(updateUser(userData.id, firstName, lastName));
-    //   setUpdateForm(false);
-    //   return true;
-    // }
   };
 
   const handleDelete = () => {
@@ -48,22 +37,25 @@ const UpdateProfil = () => {
 
   return (
     <section className="profil-container">
-      <div className="profil-container-img">
-        <h1>
-          Profil de {userData.firstName} {userData.lastName}
-        </h1>
-        <div className="upload-picture">
-          <h3>Photo de profil</h3>
-          <img src={userData.userPicture} alt="photo-profil" />
-          <UploadImg />
+      {updateForm === false && (
+        <div className="profil-container-img">
+          <h1>
+            Profil de {userData.firstName} {userData.lastName}
+          </h1>
+          <div className="upload-picture">
+            <h3>Photo de profil</h3>
+            <img src={userData.userPicture} alt="photo-profil" />
+            <UploadImg />
+          </div>
         </div>
-      </div>
-      {updateForm ? (
+      )}
+      {updateForm && (
         <>
           <span></span>
           <h4 className="success">Modification enregistré !</h4>
         </>
-      ) : (
+      )}
+      {updateForm === false && (
         <div className="container-profil-user">
           <form action="" onSubmit={handleUpdate} id="update-profil">
             <label htmlFor="firstName">Prénom</label>

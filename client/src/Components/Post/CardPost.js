@@ -29,9 +29,9 @@ const CardPost = ({ post }) => {
     dispatch(getUsers());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getLikes(post.id));
-  }, [dispatch, post.id]);
+  // useEffect(() => {
+  //   dispatch(getLikes(post.id));
+  // }, [dispatch, post.id]);
 
   useEffect(() => {
     !isEmpty(postsData[0]) && setIsLoading(false);

@@ -1,10 +1,7 @@
 import {
   CREATE_POST,
   DELETE_POST,
-  GET_LIKES,
   GET_POSTS,
-  LIKE_POST,
-  UNLIKE_POST,
   UPDATE_POST,
 } from "../actions/post.action";
 
@@ -42,39 +39,6 @@ export default function postReducer(state = initialState, action) {
         ...state,
         postData: arrayData,
       };
-    }
-    case LIKE_POST: {
-      let arrayData = [...state.postData];
-      return arrayData.map((post) => {
-        if (post.id === action.payload.UserId) {
-          return {
-            ...post,
-            postData: arrayData,
-          };
-        }
-      });
-    }
-    case UNLIKE_POST: {
-      let arrayData = [...state.postData].filter((post) => {
-        if (post.id === action.payload.id) {
-          return {
-            ...post,
-            postData: arrayData,
-          };
-        }
-        return post;
-      });
-    }
-    case GET_LIKES: {
-      let arrayData = [...state.postData];
-      return arrayData.map((post) => {
-        if (post.id === action.payload.id) {
-          return {
-            ...post,
-            Likes: action.payload.Likes,
-          };
-        } else return post;
-      });
     }
     default:
       return state;
