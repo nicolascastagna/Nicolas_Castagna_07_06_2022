@@ -3,13 +3,13 @@ module.exports = (sequelize, Sequelize) => {
 
   Likes.associate = (models) => {
     Likes.belongsTo(models.Posts, {
-      onDelete: "cascade",
       hooks: true,
+      onDelete: "cascade",
     });
 
     Likes.belongsTo(models.Users, {
-      onDelete: "cascade",
       hooks: true,
+      onDelete: "cascade",
     });
   };
 

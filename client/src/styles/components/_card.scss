@@ -6,6 +6,10 @@
     margin: 20px auto;
     border-radius: 20px;
     min-height: 100px;
+    &:hover {
+        transition: 0.2s;
+        background: $color-2;
+    }
     @media screen and(max-width: 768px) {
         min-width: 310px;
         max-width: 650px;
@@ -93,6 +97,7 @@
           width: 100% !important;
           margin-bottom: 15px;
           resize: none;
+        
           @media screen and(max-width: 768px) {
            border-radius: 0;
         }
@@ -108,7 +113,7 @@
             height: 40px;
             border-radius: 20px;
             &:hover {
-                background: $color-2;
+                background: $color-1;
                 cursor: pointer;
                 transition: 0.1s;
             }

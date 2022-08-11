@@ -92,7 +92,7 @@ form {
       border-radius: 20px;
       &[type=submit] {
         &:hover {
-            background: $color-2;
+            background: $color-1;
             cursor: pointer;
             transition: 0.2s;
         }

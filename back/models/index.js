@@ -43,36 +43,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// db.Users = require("./Users")(sequelize, Sequelize);
-// db.Posts = require("./Posts")(sequelize, Sequelize);
-// db.Likes = require("./Likes")(sequelize, Sequelize);
-// db.Comments = require("./Comments.js")(sequelize, Sequelize);
-
-// db.Users.hasMany(db.Posts, {
-//   onDelete: "cascade",
-//   hooks: true,
-// });
-
-// db.Posts.belongsTo(db.Users, {
-//   onDelete: "cascade",
-// });
-
-// db.Posts.hasMany(db.Likes, {
-//   onDelete: "cascade",
-//   foreignKey: {  allowNull: false },
-//   hooks: true,
-// });
-
-// db.Likes.belongsTo(db.Posts, {
-//   onDelete: "cascade",
-//   foreignKey: {  allowNull: false },
-//   hooks: true,
-// });
-
-// db.Likes.belongsTo(db.Users, {
-//   onDelete: "cascade",
-//   foreignKey: { allowNull: false },
-//   hooks: true,
-// });
-
 module.exports = db;

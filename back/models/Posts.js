@@ -29,12 +29,11 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "cascade",
     });
     Posts.hasMany(models.Likes, {
-      onDelete: "cascade",
       foreignKey: { allowNull: false },
       hooks: true,
+      onDelete: "cascade",
     });
     Posts.belongsTo(models.Users, {
-      foreignKey: { allowNull: false },
       onDelete: "cascade",
     });
   };

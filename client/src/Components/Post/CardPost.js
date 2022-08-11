@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLikes, updatePost } from "../../actions/post.action";
-import { getUser } from "../../actions/user.action";
+import { updatePost } from "../../actions/post.action";
 import { getUsers } from "../../actions/users.action";
 import { isEmpty } from "../../Utils";
 import { dateParser } from "../Utils";
@@ -11,7 +10,6 @@ import LikeButton from "./LikeButton";
 const CardPost = ({ post }) => {
   const [isLoading, setIsLoading] = useState(true);
   const userData = useSelector((state) => state.userReducer.dataUser);
-  const usersData = useSelector((state) => state.usersReducer.dataAllUsers);
   const postsData = useSelector((state) => state.allPostsReducer.allPostsData);
   const [isUpdated, setIsUpdated] = useState(false);
   const [textUpdate, setTextUpdate] = useState(null);
@@ -28,10 +26,6 @@ const CardPost = ({ post }) => {
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getLikes(post.id));
-  // }, [dispatch, post.id]);
 
   useEffect(() => {
     !isEmpty(postsData[0]) && setIsLoading(false);

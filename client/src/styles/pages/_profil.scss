@@ -60,7 +60,7 @@
         margin-top: 15px;
         border: 1px solid $color-3;
         &:hover {
-            background: $color-2;
+            background: $color-1;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -70,7 +70,7 @@
 #confirm-input {
     margin: 25px 0 15px 0;
     &:hover {
-        background: $color-2;
+        background: $color-1;
         cursor: pointer;
         transition: 0.2s;
     }

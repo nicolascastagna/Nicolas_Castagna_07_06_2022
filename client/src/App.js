@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import Profil from "./pages/Profil";
 import { dataContext } from "./Components/AppContext";
 import { useDispatch } from "react-redux";
-import { getAllPosts } from "./actions/post.action";
 import { getUsers } from "./actions/users.action";
 import { getUser } from "./actions/user.action";
 

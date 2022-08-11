@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { dataContext } from "../Components/AppContext";
-import Login from "../Components/Log/Login";
 import Navbar from "../Components/Navbar";
 import Thread from "../Components/Thread";
 

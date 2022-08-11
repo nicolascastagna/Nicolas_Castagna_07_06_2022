@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const LikeButton = ({ post }) => {
@@ -12,6 +12,7 @@ const LikeButton = ({ post }) => {
     setLikes(isLiked ? likes - 1 : likes + 1);
     setIsLiked(!isLiked);
     likePost();
+    window.location.reload();
   };
 
   useEffect(() => {
