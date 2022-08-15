@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { dataContext } from "../Components/AppContext";
 import Navbar from "../Components/Navbar";
@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="home">
       <Navbar />
-      <div className="main">{!dataUser ? <Thread /> : <Navigate to="/" />}</div>
+      <div className="main">{dataUser ? <Navigate to="/" /> : <Thread />}</div>
     </div>
   );
 };

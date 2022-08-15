@@ -19,17 +19,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    likes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
   });
   Posts.associate = (models) => {
     Posts.hasMany(models.Comments, {
       onDelete: "cascade",
     });
     Posts.hasMany(models.Likes, {
-      foreignKey: { allowNull: false },
       hooks: true,
       onDelete: "cascade",
     });

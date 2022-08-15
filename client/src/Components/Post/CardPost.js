@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../../actions/post.action";
 import { getUsers } from "../../actions/users.action";
-import { isEmpty } from "../../Utils";
+import { isEmpty } from "../Utils";
 import { dateParser } from "../Utils";
 import DeleteCard from "./DeleteCard";
 import LikeButton from "./LikeButton";

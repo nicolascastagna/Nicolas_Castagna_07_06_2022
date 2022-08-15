@@ -14,9 +14,7 @@ exports.postLike = (req, res, next) => {
         if (!like) {
           Likes.create({ PostId: PostId, UserId: UserId })
             .then((like) => {
-              post.update({ likes: post.likes + 1, PostId }).then((post) => {
-                res.status(201).json({ message: "Vous avez aimé le post !" });
-              });
+              res.status(201).json({ message: "Vous avez aimé le post !" });
             })
             .catch((error) => res.status(400).json({ error: error.message }));
         } else if (like) {
@@ -24,11 +22,7 @@ exports.postLike = (req, res, next) => {
             where: { PostId: PostId, UserId: UserId },
           })
             .then((like) => {
-              post.update({ likes: post.likes - 1, PostId }).then((post) => {
-                res
-                  .status(201)
-                  .json({ message: "Vous n'aimez plus le post !" });
-              });
+              res.status(201).json({ message: "Vous n'aimez plus le post !" });
             })
             .catch((error) => res.status(400).json({ error: error.message }));
         }

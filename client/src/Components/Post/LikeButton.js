@@ -44,7 +44,7 @@ const LikeButton = ({ post }) => {
     axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}like/${post.id}`,
-      data: { UserId: token.userId, likes: 1 },
+      data: { UserId: token.userId },
       headers: {
         Authorization: "Bearer " + token.token,
         Accept: "application/json",
@@ -77,8 +77,7 @@ const LikeButton = ({ post }) => {
           </>
         )}
       </span>
-
-      <span>{post.likes}</span>
+      <span>{post.Likes.length}</span>
     </div>
   );
 };

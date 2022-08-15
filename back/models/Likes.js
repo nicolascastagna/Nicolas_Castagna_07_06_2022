@@ -3,13 +3,17 @@ module.exports = (sequelize, Sequelize) => {
 
   Likes.associate = (models) => {
     Likes.belongsTo(models.Posts, {
-      hooks: true,
       onDelete: "cascade",
+      foreignKey: {
+        name: "PostId",
+        allowNull: false,
+      },
+      hooks: true,
     });
 
     Likes.belongsTo(models.Users, {
-      hooks: true,
       onDelete: "cascade",
+      hooks: true,
     });
   };
 

@@ -35,9 +35,10 @@
 }
 
 #photo-profil {
-    height: 45px;
-    width: 45px;
+    height: 50px;
+    width: 50px;
     border-radius: 15px;
+    box-shadow: 2px 2px 2px rgba($color-3, 0.16);
     &:hover {
         transition: 0.2s;
         transform: scale(1.1);

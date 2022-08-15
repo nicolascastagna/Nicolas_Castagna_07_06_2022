@@ -87,10 +87,6 @@ exports.deleteProfil = (req, res, next) => {
 
       Users.destroy({
         where: { id: req.params.id },
-        // include: {
-        //   model: Posts,
-        //   attributes: ["likes"],
-        // },
       })
         .then(() => res.status(200).json({ message: "Utlisateur supprimé !" }))
         .catch((error) => res.status(400).json({ error: error.message }));

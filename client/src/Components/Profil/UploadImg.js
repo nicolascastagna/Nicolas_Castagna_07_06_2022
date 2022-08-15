@@ -12,7 +12,9 @@ const UploadImg = () => {
     const data = new FormData();
     data.append("file", file);
     dispatch(uploadPicture(data, userData.id));
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 150);
   };
 
   return (
