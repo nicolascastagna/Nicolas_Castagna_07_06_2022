@@ -11,7 +11,6 @@ const UpdateProfil = () => {
   const [firstName, setFirstName] = useState([]);
   const [lastName, setLastName] = useState([]);
   const error = document.querySelector(".error");
-  const regex = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{3,}$/;
 
   const handleUpdate = (e) => {
     error.innerHTML = "";
@@ -66,6 +65,7 @@ const UpdateProfil = () => {
               id="firstName"
               value={firstName}
               required
+              aria-label="firstName"
               placeholder="Ecrivez votre nouveau prénom..."
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -78,6 +78,7 @@ const UpdateProfil = () => {
               id="lastName"
               value={lastName}
               required
+              aria-label="lastName"
               placeholder="Ecrivez votre nouveau nom..."
               onChange={(e) => setLastName(e.target.value)}
             />

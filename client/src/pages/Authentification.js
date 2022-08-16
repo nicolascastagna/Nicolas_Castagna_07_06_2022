@@ -1,6 +1,5 @@
 import React from "react";
 import Log from "../Components/Log";
-import Navbar from "../Components/Navbar";
 
 const Authentification = () => {
   return (

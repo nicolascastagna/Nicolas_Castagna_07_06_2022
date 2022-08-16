@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="home">
       <Navbar />
-      <div className="main">{dataUser ? <Navigate to="/" /> : <Thread />}</div>
+      {dataUser ? <Navigate to="/" /> : <Thread />}
     </div>
   );
 };

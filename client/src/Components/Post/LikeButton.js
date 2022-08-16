@@ -52,7 +52,6 @@ const LikeButton = ({ post }) => {
       },
     })
       .then((res) => {
-        console.log(res);
         if (res.data.message === "Vous avez aimé le post !") {
           setIsLiked(true);
         } else if (res.data.message === "Vous n'aimez plus le post !") {

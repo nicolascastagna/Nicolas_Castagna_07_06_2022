@@ -1,6 +1,5 @@
 const { Users } = require("../models");
 const fs = require("fs");
-const Posts = require("../models/Posts");
 require("dotenv").config();
 
 exports.getProfil = (req, res, next) => {

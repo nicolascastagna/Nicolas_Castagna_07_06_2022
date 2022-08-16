@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { deletePost } from "../../actions/post.action";
-import { getUser } from "../../actions/user.action";
 
 const DeleteCard = (props) => {
   const dispatch = useDispatch();

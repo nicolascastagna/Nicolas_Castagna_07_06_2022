@@ -58,7 +58,7 @@ const Login = () => {
       />
       <div className="form error"></div>
       <br />
-      <input type="submit" value="Se connecter" />
+      <input type="submit" aria-label="Se connecter" value="Se connecter" />
     </form>
   );
 };

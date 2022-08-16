@@ -12,7 +12,6 @@ const db = require("./models");
 // imports routes
 const postRoutes = require("./routes/posts");
 const usersRoutes = require("./routes/user");
-const commentsRoutes = require("./routes/comments");
 const likesRoutes = require("./routes/likes");
 const profilsRoutes = require("./routes/profils");
 
@@ -38,7 +37,6 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 // Routes
 app.use("/posts", postRoutes);
 app.use("/auth", usersRoutes);
-app.use("/comments", commentsRoutes);
 app.use("/like", likesRoutes);
 app.use("/profil", profilsRoutes);
 

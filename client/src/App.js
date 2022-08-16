@@ -37,7 +37,7 @@ const App = () => {
   }, [dispatch, dataUser]);
 
   return (
-    <dataContext.Provider value={{ dataUser, setDataUser }}>
+    <dataContext.Provider value={{ dataUser }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Authentification />} />

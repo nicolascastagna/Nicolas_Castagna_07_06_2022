@@ -12,24 +12,18 @@ const Signup = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const terms = document.getElementById("terms");
     const emailError = document.querySelector(".email.error");
     const passwordConfirmError = document.querySelector(
       ".password-confirm.error"
     );
-    const termsError = document.querySelector(".terms.error");
 
     passwordConfirmError.innerHTML = "";
-    termsError.innerHTML = "";
 
     // Vérification si password n'est pas identique et si terms n'est pas coché
-    if (password !== controlPassword || !terms.checked) {
+    if (password !== controlPassword) {
       if (password !== controlPassword)
         passwordConfirmError.innerHTML =
           "Les mots de passe ne correspondent pas";
-
-      if (!terms.checked)
-        termsError.innerHTML = "Veuillez valider les conditions générales";
     } else {
       await axios({
         method: "post",
@@ -80,6 +74,7 @@ const Signup = () => {
             pattern="[A-Za-z]{2,20}"
             title="Le prénom doit contenir minimum 2 lettres"
             required
+            aria-label="firstName"
           />
           <div className="firstName error"></div>
           <label htmlFor="lastName">Nom</label>
@@ -91,6 +86,7 @@ const Signup = () => {
             onChange={(e) => setLastName(e.target.value)}
             value={lastName}
             required
+            aria-label="lastName"
             pattern="[A-Za-z]{2,20}"
             title="Le nom doit contenir minimum 2 lettres"
           />
@@ -104,6 +100,7 @@ const Signup = () => {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             required
+            aria-label="email"
           />
           <div className="email error"></div>
           <label htmlFor="password">Mot de passe</label>
@@ -132,18 +129,11 @@ const Signup = () => {
           />
           <div className="password-confirm error"></div>
           <br />
-          <input type="checkbox" id="terms" />
-          <label htmlFor="terms">
-            {" "}
-            J'accepte les
-            <a href="/" target="_blank" rel="noopener noreferrer">
-              {" "}
-              conditions générales
-            </a>
-          </label>
-          <div className="terms error"></div>
-          <br />
-          <input type="submit" value="Valider inscription" />
+          <input
+            type="submit"
+            aria-label="Inscription"
+            value="Valider inscription"
+          />
         </form>
       )}
     </>

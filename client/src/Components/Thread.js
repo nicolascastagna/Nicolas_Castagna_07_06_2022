@@ -1,14 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 import { getAllPosts } from "../actions/post.action";
 import { isEmpty } from "./Utils";
-import { dataContext } from "./AppContext";
 import CardPost from "./Post/CardPost";
 import NewPost from "./Post/NewPost";
 
 const Thread = () => {
-  const dataUser = useContext(dataContext);
   const posts = useSelector((state) => state.allPostsReducer.allPostsData);
   const dispatch = useDispatch();
 
@@ -18,7 +15,6 @@ const Thread = () => {
 
   return (
     <div className="thread-container">
-      {!dataUser && <Navigate to="/" />}
       <h1>Fil d'actualité</h1>
       <NewPost />
       <ul className="thread">
