@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import Profil from "./pages/Profil";
 import { dataContext } from "./Components/AppContext";
 import { useDispatch } from "react-redux";
-import { getUsers } from "./actions/users.action";
 import { getUser } from "./actions/user.action";
 
 const App = () => {
@@ -32,7 +31,6 @@ const App = () => {
     checkToken();
     if (dataUser) {
       dispatch(getUser(dataUser));
-      dispatch(getUsers());
     }
   }, [dispatch, dataUser]);
 

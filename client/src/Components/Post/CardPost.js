@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePost } from "../../actions/post.action";
-import { getUsers } from "../../actions/users.action";
 import { isEmpty } from "../Utils";
 import { dateParser } from "../Utils";
 import DeleteCard from "./DeleteCard";
@@ -22,10 +21,6 @@ const CardPost = ({ post }) => {
     }
     setIsUpdated(false);
   };
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
 
   useEffect(() => {
     !isEmpty(postsData[0]) && setIsLoading(false);
